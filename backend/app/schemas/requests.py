@@ -1,4 +1,5 @@
 from typing import Literal, Annotated
+from uuid import UUID
 from pydantic import BaseModel, Field
 
 Snr = Annotated[float, Field(ge=-15, le=40, allow_inf_nan=False)]
@@ -17,3 +18,16 @@ class ChannelConfig(BaseModel):
     bit_flip_rate: float = Field(default=0, ge=0, le=0.5, allow_inf_nan=False)
     seed: int = Field(default=42, ge=0, le=2**32 - 1)
     symbol_rate: int = Field(default=12000, ge=100, le=1000000)
+
+
+class TransmissionRequest(BaseModel):
+    media_id: UUID | None = None
+    text: str | None = Field(default=None, max_length=4000)
+    reference: str | None = Field(default=None, max_length=4000)
+    language: Language = "en"
+    mode: Mode = "conventional"
+    bandwidth_kbps: Literal[1.5, 3.0, 6.0, 12.0] = 3.0
+    budget_kbps: float = Field(default=8, ge=0.1, le=256, allow_inf_nan=False)
+    objective: Literal["meaning", "waveform"] = "meaning"
+    target_latency_ms: int = Field(default=10000, ge=100, le=120000)
+    channel_config: ChannelConfig = Field(default_factory=ChannelConfig)
