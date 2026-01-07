@@ -31,3 +31,8 @@ class TransmissionRequest(BaseModel):
     objective: Literal["meaning", "waveform"] = "meaning"
     target_latency_ms: int = Field(default=10000, ge=100, le=120000)
     channel_config: ChannelConfig = Field(default_factory=ChannelConfig)
+
+
+class SynthesisRequest(BaseModel):
+    text: str = Field(min_length=1, max_length=1000)
+    language: Language = "en"
