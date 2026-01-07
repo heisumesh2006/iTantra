@@ -41,3 +41,11 @@ class SynthesisRequest(BaseModel):
 class TranscriptionRequest(BaseModel):
     media_id: UUID
     language: Language = "en"
+
+
+class ChannelSweepRequest(BaseModel):
+    config: ChannelConfig = Field(default_factory=ChannelConfig)
+    snr_values: list[Snr] = Field(
+        default_factory=lambda: [-4, -2, 0, 2, 4, 6, 8, 10, 12], min_length=1, max_length=21
+    )
+    trials: int = Field(default=24, ge=1, le=100)
