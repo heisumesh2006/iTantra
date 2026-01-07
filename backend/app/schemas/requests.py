@@ -36,3 +36,8 @@ class TransmissionRequest(BaseModel):
 class SynthesisRequest(BaseModel):
     text: str = Field(min_length=1, max_length=1000)
     language: Language = "en"
+
+
+class TranscriptionRequest(BaseModel):
+    media_id: UUID
+    language: Language = "en"
