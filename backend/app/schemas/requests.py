@@ -49,3 +49,15 @@ class ChannelSweepRequest(BaseModel):
         default_factory=lambda: [-4, -2, 0, 2, 4, 6, 8, 10, 12], min_length=1, max_length=21
     )
     trials: int = Field(default=24, ge=1, le=100)
+
+
+class ExperimentRequest(BaseModel):
+    media_id: UUID
+    language: Language = "en"
+    modes: list[Literal["conventional", "neural", "semantic"]] = Field(
+        default_factory=lambda: ["conventional", "neural", "semantic"], min_length=1, max_length=3
+    )
+    snr_values: list[Snr] = Field(default_factory=lambda: [4, 8, 12], min_length=1, max_length=10)
+    repeats: int = Field(default=1, ge=1, le=5)
+    reference: str | None = Field(default=None, max_length=4000)
+    config: ChannelConfig = Field(default_factory=ChannelConfig)
