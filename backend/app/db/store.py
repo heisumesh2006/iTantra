@@ -1,5 +1,7 @@
+import json
 import sqlite3
 from datetime import datetime, timezone
+from uuid import uuid4
 from app.core.config import STORAGE
 
 DB = STORAGE / "itantra.sqlite3"
@@ -35,3 +37,14 @@ def initialize() -> None:
                 f"UPDATE {table} SET status='failed', error='Server restarted during processing' "
                 "WHERE status IN ('queued','running')"
             )
+
+
+def register_media(path, metadata: dict) -> dict:
+    identifier = str(uuid4())
+    entry = {"id": identifier, "created_at": now(), **metadata, "url": f"/api/v1/media/{identifier}"}
+    with connection() as db:
+        db.execute(
+            "INSERT INTO media VALUES(?,?,?,?)",
+            (identifier, entry["created_at"], str(path), json.dumps(entry)),
+        )
+    return entry
