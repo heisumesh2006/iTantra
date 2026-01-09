@@ -48,3 +48,9 @@ def register_media(path, metadata: dict) -> dict:
             (identifier, entry["created_at"], str(path), json.dumps(entry)),
         )
     return entry
+
+
+def get_media(identifier: str):
+    with connection() as db:
+        row = db.execute("SELECT * FROM media WHERE id=?", (identifier,)).fetchone()
+    return dict(row) if row else None
