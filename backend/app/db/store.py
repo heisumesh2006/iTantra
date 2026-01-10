@@ -64,3 +64,22 @@ def media_entries():
 def remove_media(identifier: str):
     with connection() as db:
         db.execute("DELETE FROM media WHERE id=?", (identifier,))
+
+
+def create_job(table: str, config: dict) -> dict:
+    assert table in ("transmissions", "experiments")
+    job = {
+        "id": str(uuid4()),
+        "created_at": now(),
+        "status": "queued",
+        "config": config,
+        "result": None,
+        "error": None,
+        "stages": [],
+    }
+    with connection() as db:
+        db.execute(
+            f"INSERT INTO {table} VALUES(?,?,?,?,?,?,?)",
+            (job["id"], job["created_at"], job["status"], json.dumps(config), None, None, "[]"),
+        )
+    return job
