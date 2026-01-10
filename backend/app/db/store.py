@@ -59,3 +59,8 @@ def get_media(identifier: str):
 def media_entries():
     with connection() as db:
         return [dict(row) for row in db.execute("SELECT * FROM media")]
+
+
+def remove_media(identifier: str):
+    with connection() as db:
+        db.execute("DELETE FROM media WHERE id=?", (identifier,))
