@@ -54,3 +54,8 @@ def get_media(identifier: str):
     with connection() as db:
         row = db.execute("SELECT * FROM media WHERE id=?", (identifier,)).fetchone()
     return dict(row) if row else None
+
+
+def media_entries():
+    with connection() as db:
+        return [dict(row) for row in db.execute("SELECT * FROM media")]
