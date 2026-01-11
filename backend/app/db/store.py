@@ -112,3 +112,10 @@ def parse(row):
     for key in ("config", "result", "stages"):
         result[key] = json.loads(result[key]) if result[key] else None
     return result
+
+
+def get_job(table: str, identifier: str):
+    assert table in ("transmissions", "experiments")
+    with connection() as db:
+        row = db.execute(f"SELECT * FROM {table} WHERE id=?", (identifier,)).fetchone()
+    return parse(row) if row else None
