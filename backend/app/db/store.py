@@ -100,6 +100,13 @@ def save_job(table: str, job: dict):
         )
 
 
+def list_jobs(table: str, limit: int = 100):
+    assert table in ("transmissions", "experiments")
+    with connection() as db:
+        rows = db.execute(f"SELECT * FROM {table} ORDER BY created_at DESC LIMIT ?", (limit,)).fetchall()
+    return [parse(row) for row in rows]
+
+
 def parse(row):
     result = dict(row)
     for key in ("config", "result", "stages"):
