@@ -83,3 +83,18 @@ def create_job(table: str, config: dict) -> dict:
             (job["id"], job["created_at"], job["status"], json.dumps(config), None, None, "[]"),
         )
     return job
+
+
+def save_job(table: str, job: dict):
+    assert table in ("transmissions", "experiments")
+    with connection() as db:
+        db.execute(
+            f"UPDATE {table} SET status=?, result=?, error=?, stages=? WHERE id=?",
+            (
+                job["status"],
+                json.dumps(job["result"], ensure_ascii=False),
+                job["error"],
+                json.dumps(job["stages"]),
+                job["id"],
+            ),
+        )
