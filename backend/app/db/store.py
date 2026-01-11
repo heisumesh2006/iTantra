@@ -98,3 +98,10 @@ def save_job(table: str, job: dict):
                 job["id"],
             ),
         )
+
+
+def parse(row):
+    result = dict(row)
+    for key in ("config", "result", "stages"):
+        result[key] = json.loads(result[key]) if result[key] else None
+    return result
