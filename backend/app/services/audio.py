@@ -2,11 +2,12 @@ import json
 import math
 import subprocess
 from pathlib import Path
+from uuid import uuid4
 import numpy as np
 import soundfile as sf
 from scipy.signal import resample_poly, stft
 import imageio_ffmpeg
-from app.core.config import MAX_SECONDS
+from app.core.config import MEDIA, MAX_SECONDS
 from app.core.errors import ApplicationError
 from app.db import store
 
@@ -73,3 +74,11 @@ def describe(audio, rate: int) -> dict:
         },
         "input_pcm_bits": len(audio) * 16,
     }
+
+
+def save(audio, rate: int, role: str = "receiver") -> dict:
+    audio = np.asarray(audio, dtype=np.float32).reshape(-1)
+    metadata = describe(audio, rate)
+    path = MEDIA / f"{uuid4()}.wav"
+    sf.write(path, audio, rate, subtype="PCM_16")
+    return store.register_media(path, {**metadata, "role": role})
