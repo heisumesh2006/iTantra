@@ -4,8 +4,9 @@ import subprocess
 from pathlib import Path
 import numpy as np
 import soundfile as sf
-from scipy.signal import resample_poly
+from scipy.signal import resample_poly, stft
 import imageio_ffmpeg
+from app.core.config import MAX_SECONDS
 from app.core.errors import ApplicationError
 from app.db import store
 
@@ -41,3 +42,34 @@ def load(identifier: str):
         raise ApplicationError("Media is missing or expired; upload it again", "media_missing", 404)
     data, rate = sf.read(entry["path"], dtype="float32", always_2d=True)
     return data.mean(axis=1), rate, json.loads(entry["metadata"])
+
+
+def describe(audio, rate: int) -> dict:
+    if len(audio) == 0 or not np.isfinite(audio).all():
+        raise ApplicationError("Empty or invalid audio")
+    if not 0.1 <= len(audio) / rate <= MAX_SECONDS:
+        raise ApplicationError(f"Audio must be between 0.1 and {MAX_SECONDS} seconds")
+    rms = float(np.sqrt(np.mean(audio**2)))
+    peaks = [float(np.max(np.abs(chunk))) for chunk in np.array_split(audio, min(220, len(audio)))]
+    frequencies, times, spectrum = stft(
+        audio, rate, nperseg=min(256, len(audio)), noverlap=min(128, len(audio) // 2)
+    )
+    spectrum = 20 * np.log10(np.maximum(np.abs(spectrum), 1e-6))
+    step = max(1, spectrum.shape[1] // 100)
+    return {
+        "sample_rate": rate,
+        "channels": 1,
+        "samples": len(audio),
+        "duration_seconds": len(audio) / rate,
+        "format": "PCM16 WAV",
+        "rms": rms,
+        "silent": rms < 0.001,
+        "clipped_fraction": float(np.mean(np.abs(audio) >= 0.999)),
+        "waveform": peaks,
+        "spectrogram": {
+            "values": spectrum[:, ::step].round(1).tolist(),
+            "frequencies": frequencies.tolist(),
+            "times": times[::step].tolist(),
+        },
+        "input_pcm_bits": len(audio) * 16,
+    }
