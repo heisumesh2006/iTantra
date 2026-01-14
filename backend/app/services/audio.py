@@ -82,3 +82,45 @@ def save(audio, rate: int, role: str = "receiver") -> dict:
     path = MEDIA / f"{uuid4()}.wav"
     sf.write(path, audio, rate, subtype="PCM_16")
     return store.register_media(path, {**metadata, "role": role})
+
+
+def ingest(data: bytes, extension: str) -> dict:
+    source = MEDIA / f"{uuid4()}{extension}"
+    target = MEDIA / f"{uuid4()}.wav"
+    source.write_bytes(data)
+    try:
+        # Local-file input only; exclude network protocols embedded in malicious media containers.
+        run_ffmpeg(
+            [
+                "-protocol_whitelist",
+                "file,pipe",
+                "-y",
+                "-i",
+                str(source),
+                "-t",
+                str(MAX_SECONDS + 1),
+                "-ac",
+                "1",
+                "-ar",
+                "16000",
+                str(target),
+            ]
+        )
+        audio, rate = sf.read(target, dtype="float32")
+        metadata = describe(audio, rate)
+        original = store.register_media(
+            source, {"role": "original_upload", "format": extension, "bytes": len(data)}
+        )
+        return store.register_media(
+            target,
+            {
+                **metadata,
+                "role": "source",
+                "original_media_id": original["id"],
+                "original_url": original["url"],
+            },
+        )
+    except Exception:
+        source.unlink(missing_ok=True)
+        target.unlink(missing_ok=True)
+        raise
