@@ -1,13 +1,14 @@
 import json
 import math
 import subprocess
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from uuid import uuid4
 import numpy as np
 import soundfile as sf
 from scipy.signal import resample_poly, stft
 import imageio_ffmpeg
-from app.core.config import MEDIA, MAX_SECONDS
+from app.core.config import MEDIA, MAX_SECONDS, RETENTION_HOURS
 from app.core.errors import ApplicationError
 from app.db import store
 
@@ -124,3 +125,11 @@ def ingest(data: bytes, extension: str) -> dict:
         source.unlink(missing_ok=True)
         target.unlink(missing_ok=True)
         raise
+
+
+def cleanup():
+    cutoff = datetime.now(timezone.utc) - timedelta(hours=RETENTION_HOURS)
+    for entry in store.media_entries():
+        if datetime.fromisoformat(entry["created_at"]) < cutoff:
+            Path(entry["path"]).unlink(missing_ok=True)
+            store.remove_media(entry["id"])
