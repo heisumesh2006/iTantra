@@ -1,3 +1,4 @@
+import io
 import json
 import math
 import subprocess
@@ -133,3 +134,9 @@ def cleanup():
         if datetime.fromisoformat(entry["created_at"]) < cutoff:
             Path(entry["path"]).unlink(missing_ok=True)
             store.remove_media(entry["id"])
+
+
+def wav_bytes(audio, rate: int):
+    buffer = io.BytesIO()
+    sf.write(buffer, audio, rate, format="WAV", subtype="PCM_16")
+    return buffer.getvalue()
