@@ -1,4 +1,5 @@
 import unicodedata
+import numpy as np
 
 
 def distance(a, b) -> int:
@@ -19,3 +20,15 @@ def text_scores(reference: str | None, hypothesis: str | None):
         "wer": distance(a.split(), b.split()) / len(a.split()) if a.split() else None,
         "cer": distance(a, b) / len(a) if a else None,
     }
+
+
+def si_sdr(reference, estimate):
+    length = min(len(reference), len(estimate))
+    x = np.asarray(reference[:length], dtype=np.float64)
+    y = np.asarray(estimate[:length], dtype=np.float64)
+    x, y = x - x.mean(), y - y.mean()
+    energy = np.dot(x, x)
+    if energy < 1e-10 or np.dot(y, y) < 1e-10:
+        return None
+    target = np.dot(x, y) / energy * x
+    return float(10 * np.log10((np.dot(target, target) + 1e-12) / (np.dot(y - target, y - target) + 1e-12)))
