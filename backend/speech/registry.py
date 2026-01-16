@@ -16,3 +16,7 @@ VERIFICATION = ROOT / "models" / "verified.json"
 
 def stt_path():
     return MODEL_CACHE / f"whisper-{WHISPER_MODEL}"
+
+
+def kannada_path():
+    return MODEL_CACHE / "kannada-vakyansh"
