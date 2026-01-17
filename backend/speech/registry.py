@@ -20,3 +20,7 @@ def stt_path():
 
 def kannada_path():
     return MODEL_CACHE / "kannada-vakyansh"
+
+
+def has_weights(path):
+    return path.is_dir() and any(path.glob("*.safetensors")) and (path / "config.json").is_file()
