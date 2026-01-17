@@ -41,5 +41,9 @@ def selected_stt(language: str) -> dict:
     }
 
 
+def tts_path(language: str):
+    return MODEL_CACHE / f"tts-{language}"
+
+
 def has_weights(path):
     return path.is_dir() and any(path.glob("*.safetensors")) and (path / "config.json").is_file()
