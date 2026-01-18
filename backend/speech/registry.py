@@ -1,3 +1,4 @@
+import json
 from importlib.util import find_spec
 from app.core.config import MODEL_CACHE, ROOT, WHISPER_MODEL, KANNADA_STT
 
@@ -51,3 +52,9 @@ def neural_path():
 
 def has_weights(path):
     return path.is_dir() and any(path.glob("*.safetensors")) and (path / "config.json").is_file()
+
+
+def verified():
+    if not VERIFICATION.exists():
+        return {}
+    return json.loads(VERIFICATION.read_text(encoding="utf-8"))
