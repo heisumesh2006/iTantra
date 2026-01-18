@@ -45,5 +45,9 @@ def tts_path(language: str):
     return MODEL_CACHE / f"tts-{language}"
 
 
+def neural_path():
+    return MODEL_CACHE / "encodec-24khz"
+
+
 def has_weights(path):
     return path.is_dir() and any(path.glob("*.safetensors")) and (path / "config.json").is_file()
