@@ -58,3 +58,50 @@ def verified():
     if not VERIFICATION.exists():
         return {}
     return json.loads(VERIFICATION.read_text(encoding="utf-8"))
+
+
+def languages():
+    evidence = verified()
+    entries = []
+    for code, info in LANGUAGES.items():
+        descriptor = selected_stt(code)
+        tts_installed = find_spec("transformers") is not None and has_weights(tts_path(code))
+        if code == "kn" and KANNADA_STT == "vakyansh":
+            check = evidence.get("providers", {}).get("kn", {})
+            stt_checked = check.get("cache_key") == descriptor["cache_key"] and check.get(
+                "native_script_verified", False
+            )
+            roundtrip_checked = stt_checked and check.get("roundtrip_verified", False)
+        else:
+            stt_checked = (
+                code in evidence.get("semantic_verified", []) and evidence.get("stt_model") == stt_path().name
+            )
+            roundtrip_checked = stt_checked
+        ready = bool(descriptor["installed"] and tts_installed and roundtrip_checked)
+        status = (
+            "Round trip tested (synthetic)"
+            if ready
+            else "Experimental"
+            if descriptor["installed"] and tts_installed
+            else "STT installed; TTS not installed"
+            if descriptor["installed"]
+            else "Not installed"
+        )
+        entries.append(
+            {
+                "code": code,
+                **info,
+                "stt_installed": descriptor["installed"],
+                "tts_installed": tts_installed,
+                "stt_verified": bool(descriptor["installed"] and stt_checked),
+                "tts_verified": tts_installed and code in evidence.get("tts", []),
+                "roundtrip_verified": ready,
+                "status": status,
+                "tts_model": f"facebook/mms-tts-{info['mms']}",
+                "stt_model": descriptor["model"],
+                "stt_provider": descriptor["provider"],
+                "stt_revision": descriptor["revision"],
+                "quality_validation": "No human-speech benchmark; smoke verification uses synthetic speech",
+            }
+        )
+    return entries
