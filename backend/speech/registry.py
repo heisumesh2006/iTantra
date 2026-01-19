@@ -105,3 +105,30 @@ def languages():
             }
         )
     return entries
+
+
+def capabilities():
+    return {
+        "simulation_mode": True,
+        "hardware": "No RF hardware attached",
+        "device": "CPU",
+        "conventional": {"installed": True, "provider": "FFmpeg libopus", "target_kbps": 12},
+        "neural": {
+            "installed": find_spec("transformers") is not None and has_weights(neural_path()),
+            "verified": bool(verified().get("neural")),
+            "model": "facebook/encodec_24khz",
+            "bandwidths": [1.5, 3, 6, 12],
+            "license": "CC-BY-NC-4.0",
+        },
+        "languages": languages(),
+        "stt": {
+            "provider": "Local per-language router",
+            "model": WHISPER_MODEL,
+            "kannada_provider": KANNADA_STT,
+            "compute_type": "int8",
+            "confidence": "Not available; segment log probability is diagnostic only",
+        },
+        "tts": {"provider": "Meta MMS VITS", "license": "CC-BY-NC-4.0; research/noncommercial use"},
+        "privacy": "Offline local inference; no audio sent to external services. Models download only via script.",
+        "verification": verified(),
+    }
