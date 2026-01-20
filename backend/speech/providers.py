@@ -5,7 +5,7 @@ import numpy as np
 from app.core.config import WHISPER_MODEL
 from app.core.errors import ApplicationError
 from app.services.audio import resample
-from speech.registry import LANGUAGES, stt_path
+from speech.registry import LANGUAGES, stt_path, tts_path, has_weights
 
 
 class SpeechRecognitionProvider(ABC):
@@ -79,3 +79,21 @@ class FasterWhisperProvider(SpeechRecognitionProvider):
                 for s in segments
             ],
         }
+
+
+@lru_cache(maxsize=2)
+def mms(language: str):
+    path = tts_path(language)
+    if not has_weights(path):
+        raise ApplicationError(
+            f"TTS weights missing for {language}. Run scripts/download-models.py --tts {language}",
+            "model_unavailable",
+            503,
+        )
+    from transformers import AutoTokenizer, VitsModel
+    import torch
+
+    torch.set_num_threads(2)
+    tokenizer = AutoTokenizer.from_pretrained(path, local_files_only=True, trust_remote_code=False)
+    model = VitsModel.from_pretrained(path, local_files_only=True).eval()
+    return tokenizer, model
