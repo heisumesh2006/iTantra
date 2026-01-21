@@ -97,3 +97,31 @@ def mms(language: str):
     tokenizer = AutoTokenizer.from_pretrained(path, local_files_only=True, trust_remote_code=False)
     model = VitsModel.from_pretrained(path, local_files_only=True).eval()
     return tokenizer, model
+
+
+class MMSProvider(SpeechSynthesisProvider):
+    def synthesize(self, text: str, language: str):
+        if language not in LANGUAGES or not text.strip() or len(text) > 1000:
+            raise ApplicationError("TTS requires a supported language and 1–1000 characters")
+        start = time.perf_counter()
+        tokenizer, model = mms(language)
+        import torch
+
+        inputs = tokenizer(text, return_tensors="pt")
+        if inputs["input_ids"].numel() == 0:
+            raise ApplicationError("Text has no tokens supported by this TTS model")
+        # fork_rng confines deterministic synthesis to this call.
+        with torch.random.fork_rng(), torch.inference_mode():
+            torch.manual_seed(42)
+            waveform = model(**inputs).waveform[0].cpu().numpy()
+        return (
+            waveform,
+            model.config.sampling_rate,
+            {
+                "provider": "Meta MMS VITS",
+                "model": f"facebook/mms-tts-{LANGUAGES[language]['mms']}",
+                "processing_ms": (time.perf_counter() - start) * 1000,
+                "license": "CC-BY-NC-4.0",
+            },
+        )
+TTS = MMSProvider()
