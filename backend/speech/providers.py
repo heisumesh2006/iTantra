@@ -124,4 +124,25 @@ class MMSProvider(SpeechSynthesisProvider):
                 "license": "CC-BY-NC-4.0",
             },
         )
+
+
+class LocalRecognitionRouter(SpeechRecognitionProvider):
+    def __init__(self):
+        self.whisper_provider = FasterWhisperProvider()
+
+    def transcribe(self, audio, sample_rate: int, language: str) -> dict:
+        from app.core.config import KANNADA_STT
+
+        if language == "kn" and KANNADA_STT == "vakyansh":
+            from speech.indic_ctc import VakyanshKannadaProvider
+
+            return VakyanshKannadaProvider().transcribe(audio, sample_rate, language)
+        if language == "kn" and KANNADA_STT not in ("whisper", "vakyansh"):
+            raise ApplicationError(
+                "ITANTRA_KANNADA_STT must be whisper or vakyansh", "invalid_configuration", 503
+            )
+        return self.whisper_provider.transcribe(audio, sample_rate, language)
+
+
+STT = LocalRecognitionRouter()
 TTS = MMSProvider()
