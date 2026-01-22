@@ -42,3 +42,16 @@ class Packet:
             + self.payload
         )
         return framed + CRC.pack(zlib.crc32(framed))
+
+    @classmethod
+    def parse(cls, raw: bytes):
+        if len(raw) < HEADER.size + CRC.size:
+            raise ApplicationError("Truncated packet")
+        magic, version, session, seq, total, mode, lang, length = HEADER.unpack(raw[: HEADER.size])
+        if magic != MAGIC or version != VERSION or len(raw) != HEADER.size + length + CRC.size:
+            raise ApplicationError("Packet header or length invalid")
+        if zlib.crc32(raw[:-4]) != CRC.unpack(raw[-4:])[0]:
+            raise ApplicationError("CRC mismatch", "integrity_failure")
+        packet = cls(UUID(bytes=session), seq, total, mode, lang, raw[HEADER.size : -4])
+        packet.serialize()  # validate all bounds and identifiers
+        return packet
