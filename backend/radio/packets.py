@@ -55,3 +55,22 @@ class Packet:
         packet = cls(UUID(bytes=session), seq, total, mode, lang, raw[HEADER.size : -4])
         packet.serialize()  # validate all bounds and identifiers
         return packet
+
+
+def segment(payload: bytes, session: UUID, mode: str, language: str, packet_size: int) -> list[Packet]:
+    if not payload or not 32 <= packet_size <= MAX_PAYLOAD:
+        raise ApplicationError("Empty payload or invalid packet size")
+    total = (len(payload) + packet_size - 1) // packet_size
+    if total > MAX_PACKETS:
+        raise ApplicationError("Payload exceeds packet count bound")
+    return [
+        Packet(
+            session,
+            i,
+            total,
+            MODES[mode],
+            LANGUAGES[language],
+            payload[i * packet_size : (i + 1) * packet_size],
+        )
+        for i in range(total)
+    ]
