@@ -74,3 +74,19 @@ def segment(payload: bytes, session: UUID, mode: str, language: str, packet_size
         )
         for i in range(total)
     ]
+
+
+def reassemble(packets: list[Packet]) -> bytes:
+    if not packets:
+        raise ApplicationError("No intact packets recovered", "recovery_failure")
+    first = packets[0]
+    if len(packets) != first.total or len({p.sequence for p in packets}) != first.total:
+        raise ApplicationError(
+            "Missing or duplicate packets; receiver cannot reconstruct payload", "recovery_failure"
+        )
+    if any(
+        (p.session, p.total, p.mode, p.language) != (first.session, first.total, first.mode, first.language)
+        for p in packets
+    ):
+        raise ApplicationError("Inconsistent packet session metadata")
+    return b"".join(p.payload for p in sorted(packets, key=lambda p: p.sequence))
