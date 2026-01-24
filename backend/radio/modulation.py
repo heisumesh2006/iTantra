@@ -13,3 +13,9 @@ def modulate(bits: NDArray, modulation: str) -> tuple[NDArray, int]:
         pairs = np.pad(bits, (0, padding)).reshape(-1, 2)
         return ((1.0 - 2.0 * pairs[:, 0]) + 1j * (1.0 - 2.0 * pairs[:, 1])) / np.sqrt(2), padding
     raise ValueError("Unsupported modulation")
+
+
+def demodulate(symbols: NDArray, modulation: str, padding: int = 0) -> NDArray:
+    if modulation == "BPSK":
+        return (np.real(symbols) < 0).astype(np.uint8)
+    raise ValueError("Unsupported modulation")
