@@ -18,4 +18,7 @@ def modulate(bits: NDArray, modulation: str) -> tuple[NDArray, int]:
 def demodulate(symbols: NDArray, modulation: str, padding: int = 0) -> NDArray:
     if modulation == "BPSK":
         return (np.real(symbols) < 0).astype(np.uint8)
+    if modulation == "QPSK":
+        bits = np.column_stack((np.real(symbols) < 0, np.imag(symbols) < 0)).astype(np.uint8).ravel()
+        return bits[:-padding] if padding else bits
     raise ValueError("Unsupported modulation")
