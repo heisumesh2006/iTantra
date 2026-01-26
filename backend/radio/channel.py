@@ -1,6 +1,7 @@
 import time
 from uuid import UUID
 import numpy as np
+from scipy.special import erfc
 from app.core.errors import ApplicationError
 from app.schemas.requests import ChannelConfig
 from radio.modulation import modulate, demodulate
@@ -114,4 +115,52 @@ def transport(
             "configured_symbol_rate": config.symbol_rate,
             "gross_link_bps": sent_bits / (symbols_count / config.symbol_rate),
         },
+    }
+
+
+def sweep(request) -> dict:
+    rng = np.random.default_rng(request.config.seed)
+    payload = rng.bytes(1024)
+    points, constellation = [], []
+    for snr in request.snr_values:
+        if not np.isfinite(snr) or not -15 <= snr <= 40:
+            raise ApplicationError("Sweep Es/N0 values must be finite and in [-15,40]")
+        bit_errors = compared = packet_errors = packet_count = success = 0
+        for trial in range(request.trials):
+            config = request.config.model_copy(
+                update={"snr_db": snr, "seed": (request.config.seed + trial) % 2**32}
+            )
+            result = transport(payload, UUID(int=1), "semantic", "en", config)
+            metrics = result["metrics"]
+            bit_errors += metrics["bit_errors"]
+            compared += metrics["compared_bits"]
+            packet_count += metrics["packet_count"]
+            packet_errors += sum(p["status"] != "delivered" for p in result["packets"])
+            success += result["payload"] is not None
+            constellation = result["constellation"]
+        bps = 1 if request.config.modulation == "BPSK" else 2
+        reference = (
+            float(0.5 * erfc(np.sqrt(10 ** (snr / 10) / bps)))
+            if (
+                request.config.channel == "awgn"
+                and request.config.bit_flip_rate == 0
+                and request.config.repetition == 1
+            )
+            else None
+        )
+        points.append(
+            {
+                "snr_db": snr,
+                "ber": bit_errors / compared if compared else None,
+                "packet_error_rate": packet_errors / packet_count,
+                "recovery_rate": success / request.trials,
+                "theoretical_ber": reference,
+                "compared_bits": compared,
+            }
+        )
+    return {
+        "points": points,
+        "constellation": constellation,
+        "config": request.model_dump(),
+        "snr_definition": "Es/N0 dB; unit average symbol energy, coherent perfect CSI for Rayleigh",
     }
