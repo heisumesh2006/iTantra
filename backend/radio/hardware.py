@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from app.core.errors import ApplicationError
 
 
 class RadioHardwareAdapter(ABC):
@@ -6,3 +7,12 @@ class RadioHardwareAdapter(ABC):
 
     @abstractmethod
     def transmit_receive(self, symbols, sample_rate: int): ...
+
+
+class UnavailableHardwareAdapter(RadioHardwareAdapter):
+    def transmit_receive(self, symbols, sample_rate: int):
+        raise ApplicationError(
+            "Physical SDR operation is unavailable; use the validated software simulator",
+            "hardware_unavailable",
+            503,
+        )
