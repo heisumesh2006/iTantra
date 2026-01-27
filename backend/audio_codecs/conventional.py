@@ -33,3 +33,24 @@ def encode(audio, sample_rate: int) -> bytes:
     if not payload.startswith(b"OggS"):
         raise ApplicationError("Conventional codec returned an invalid container")
     return payload
+
+
+def decode(payload: bytes):
+    with TemporaryDirectory() as directory:
+        source, target = Path(directory) / "encoded.ogg", Path(directory) / "decoded.wav"
+        source.write_bytes(payload)
+        run_ffmpeg(
+            [
+                "-protocol_whitelist",
+                "file,pipe",
+                "-y",
+                "-i",
+                str(source),
+                "-ac",
+                "1",
+                "-ar",
+                "16000",
+                str(target),
+            ]
+        )
+        return sf.read(target, dtype="float32")
