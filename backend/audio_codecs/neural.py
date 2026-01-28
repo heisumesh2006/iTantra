@@ -44,3 +44,28 @@ def encode(audio, rate: int, bandwidth: float) -> bytes:
         separators=(",", ":"),
     ).encode()
     return b"EC10" + struct.pack(">I", len(metadata)) + metadata + np.packbits(bits).tobytes()
+
+
+def decode(payload: bytes):
+    import torch
+
+    if payload[:4] != b"EC10" or len(payload) < 8:
+        raise ApplicationError("Invalid neural codec envelope")
+    header_size = struct.unpack(">I", payload[4:8])[0]
+    if not 0 < header_size <= 1024 or len(payload) < 8 + header_size:
+        raise ApplicationError("Invalid neural metadata length")
+    metadata = json.loads(payload[8 : 8 + header_size])
+    shape = metadata["shape"]
+    if metadata["model"] != "facebook/encodec_24khz" or len(shape) != 4 or shape[:2] != [1, 1]:
+        raise ApplicationError("Unsupported neural model or tensor shape")
+    if shape[2] not in (2, 4, 8, 16) or not 1 <= shape[3] <= 5000 or not 1 <= metadata["samples"] <= 1440000:
+        raise ApplicationError("Neural token bounds invalid")
+    count = int(np.prod(shape))
+    packed = payload[8 + header_size :]
+    if len(packed) != (count * 10 + 7) // 8:
+        raise ApplicationError("Neural token stream length mismatch")
+    bits = np.unpackbits(np.frombuffer(packed, dtype=np.uint8))[: count * 10].reshape(count, 10)
+    codes = (bits.astype(np.int64) @ (1 << np.arange(9, -1, -1))).reshape(shape)
+    with torch.inference_mode():
+        waveform = model().decode(torch.from_numpy(codes), [None]).audio_values[0, 0].cpu().numpy()
+    return waveform[: metadata["samples"]], 24000
