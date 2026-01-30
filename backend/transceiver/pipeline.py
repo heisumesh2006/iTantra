@@ -1,3 +1,4 @@
+from app.services.inference import INFERENCE_LOCK
 import time
 from uuid import uuid4
 from app.core.errors import ApplicationError
@@ -133,3 +134,8 @@ def _execute(request, stage=lambda name, detail=None: None, cancelled=lambda: Fa
         "timing": timing,
         **link,
     }
+
+
+def execute(request, stage=lambda name, detail=None: None, cancelled=lambda: False):
+    with INFERENCE_LOCK:
+        return _execute(request, stage, cancelled)
