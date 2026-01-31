@@ -90,3 +90,12 @@ def run(table, job, request, event):
         store.save_job(table, job)
         with LOCK:
             ACTIVE.pop(job["id"], None)
+
+
+def cancel(identifier):
+    with LOCK:
+        event = ACTIVE.get(identifier)
+        if event:
+            event.set()
+            return True
+    return False
