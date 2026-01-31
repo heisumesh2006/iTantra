@@ -12,6 +12,17 @@ LOCK = threading.Lock()
 ACTIVE = {}
 
 
+def submit(table: str, request):
+    with LOCK:
+        if len(ACTIVE) >= 8:
+            raise ApplicationError("Processing queue is full; wait for an active job", "queue_full", 429)
+        job = store.create_job(table, request.model_dump(mode="json"))
+        event = threading.Event()
+        ACTIVE[job["id"]] = event
+    EXECUTOR.submit(run, table, job, request, event)
+    return job
+
+
 def run(table, job, request, event):
     def stage(name, detail=None):
         job["stages"].append({"name": name, "timestamp": store.now(), "detail": detail})
