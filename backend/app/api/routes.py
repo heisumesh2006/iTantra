@@ -1,7 +1,11 @@
 from pathlib import Path
+from datetime import datetime, timezone, timedelta
+from uuid import UUID
 from fastapi import APIRouter, UploadFile, Request
-from app.core.config import MAX_BYTES
+from fastapi.responses import FileResponse
+from app.core.config import MAX_BYTES, RETENTION_HOURS
 from app.core.errors import ApplicationError
+from app.db import store
 from app.services import audio
 from speech.registry import capabilities, languages
 
@@ -40,3 +44,17 @@ async def upload(request: Request, file: UploadFile):
     from starlette.concurrency import run_in_threadpool
 
     return await run_in_threadpool(audio.ingest, data, extension)
+
+
+@router.get("/media/{identifier}")
+def media(identifier: UUID):
+    entry = store.get_media(str(identifier))
+    if not entry or not Path(entry["path"]).is_file():
+        raise ApplicationError("Media missing or expired", "media_missing", 404)
+    if datetime.fromisoformat(entry["created_at"]) < datetime.now(timezone.utc) - timedelta(
+        hours=RETENTION_HOURS
+    ):
+        Path(entry["path"]).unlink(missing_ok=True)
+        store.remove_media(str(identifier))
+        raise ApplicationError("Media expired", "media_missing", 404)
+    return FileResponse(entry["path"], filename=f"itantra-{identifier}{Path(entry['path']).suffix}")
