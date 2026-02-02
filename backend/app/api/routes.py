@@ -7,10 +7,11 @@ from fastapi.responses import FileResponse
 from app.core.config import MAX_BYTES, RETENTION_HOURS
 from app.core.errors import ApplicationError
 from app.db import store
-from app.schemas.requests import SynthesisRequest, TranscriptionRequest
+from app.schemas.requests import TransmissionRequest, SynthesisRequest, TranscriptionRequest
 from app.services import audio
 from speech.registry import capabilities, languages
 from speech.providers import STT, TTS
+from transceiver.adaptive import recommend
 
 router = APIRouter(prefix="/api/v1")
 
@@ -75,3 +76,8 @@ def synthesize(request: SynthesisRequest):
     with MODEL_LOCK:
         waveform, rate, info = TTS.synthesize(request.text, request.language)
         return {"media": audio.save(waveform, rate), **info}
+
+
+@router.post("/adaptive/recommend")
+def adaptive(request: TransmissionRequest):
+    return recommend(request)
