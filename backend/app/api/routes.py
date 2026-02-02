@@ -7,10 +7,10 @@ from fastapi.responses import FileResponse
 from app.core.config import MAX_BYTES, RETENTION_HOURS
 from app.core.errors import ApplicationError
 from app.db import store
-from app.schemas.requests import TranscriptionRequest
+from app.schemas.requests import SynthesisRequest, TranscriptionRequest
 from app.services import audio
 from speech.registry import capabilities, languages
-from speech.providers import STT
+from speech.providers import STT, TTS
 
 router = APIRouter(prefix="/api/v1")
 
@@ -68,3 +68,10 @@ def transcribe(request: TranscriptionRequest):
     with MODEL_LOCK:
         waveform, rate, _ = audio.load(str(request.media_id))
         return STT.transcribe(waveform, rate, request.language)
+
+
+@router.post("/speech/synthesize")
+def synthesize(request: SynthesisRequest):
+    with MODEL_LOCK:
+        waveform, rate, info = TTS.synthesize(request.text, request.language)
+        return {"media": audio.save(waveform, rate), **info}
