@@ -1,3 +1,4 @@
+from app.services.inference import INFERENCE_LOCK as MODEL_LOCK
 from pathlib import Path
 from datetime import datetime, timezone, timedelta
 from uuid import UUID
@@ -6,8 +7,10 @@ from fastapi.responses import FileResponse
 from app.core.config import MAX_BYTES, RETENTION_HOURS
 from app.core.errors import ApplicationError
 from app.db import store
+from app.schemas.requests import TranscriptionRequest
 from app.services import audio
 from speech.registry import capabilities, languages
+from speech.providers import STT
 
 router = APIRouter(prefix="/api/v1")
 
@@ -58,3 +61,10 @@ def media(identifier: UUID):
         store.remove_media(str(identifier))
         raise ApplicationError("Media expired", "media_missing", 404)
     return FileResponse(entry["path"], filename=f"itantra-{identifier}{Path(entry['path']).suffix}")
+
+
+@router.post("/speech/transcribe")
+def transcribe(request: TranscriptionRequest):
+    with MODEL_LOCK:
+        waveform, rate, _ = audio.load(str(request.media_id))
+        return STT.transcribe(waveform, rate, request.language)
