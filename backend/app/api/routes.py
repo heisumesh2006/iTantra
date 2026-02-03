@@ -92,3 +92,8 @@ def transmit(request: TransmissionRequest):
     if request.media_id:
         audio.load(str(request.media_id))
     return jobs.submit("transmissions", request)
+
+
+@router.get("/transmissions")
+def transmissions():
+    return store.list_jobs("transmissions")
