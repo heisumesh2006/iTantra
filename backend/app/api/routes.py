@@ -8,7 +8,7 @@ from app.core.config import MAX_BYTES, RETENTION_HOURS
 from app.core.errors import ApplicationError
 from app.db import store
 from app.schemas.requests import TransmissionRequest, SynthesisRequest, TranscriptionRequest
-from app.services import audio
+from app.services import audio, jobs
 from speech.registry import capabilities, languages
 from speech.providers import STT, TTS
 from transceiver.adaptive import recommend
@@ -81,3 +81,14 @@ def synthesize(request: SynthesisRequest):
 @router.post("/adaptive/recommend")
 def adaptive(request: TransmissionRequest):
     return recommend(request)
+
+
+@router.post("/transmissions", status_code=202)
+def transmit(request: TransmissionRequest):
+    if not request.media_id and request.text is None:
+        raise ApplicationError("Provide audio or explicit semantic text")
+    if request.text is not None and request.mode not in ("semantic", "adaptive"):
+        raise ApplicationError("Manual text is available only for semantic mode")
+    if request.media_id:
+        audio.load(str(request.media_id))
+    return jobs.submit("transmissions", request)
