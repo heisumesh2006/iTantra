@@ -97,3 +97,10 @@ def transmit(request: TransmissionRequest):
 @router.get("/transmissions")
 def transmissions():
     return store.list_jobs("transmissions")
+
+
+def get_job(table, identifier):
+    job = store.get_job(table, str(identifier))
+    if not job:
+        raise ApplicationError("Job not found", "not_found", 404)
+    return job
