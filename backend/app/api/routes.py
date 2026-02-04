@@ -110,3 +110,12 @@ def get_job(table, identifier):
 @router.get("/transmissions/{identifier}/result")
 def transmission(identifier: UUID):
     return get_job("transmissions", identifier)
+
+
+@router.post("/transmissions/{identifier}/cancel")
+@router.post("/experiments/{identifier}/cancel")
+def cancel(identifier: UUID):
+    return {
+        "cancellation_requested": jobs.cancel(str(identifier)),
+        "note": "Active inference stops at its next stage boundary",
+    }
