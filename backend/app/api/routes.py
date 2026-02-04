@@ -104,3 +104,9 @@ def get_job(table, identifier):
     if not job:
         raise ApplicationError("Job not found", "not_found", 404)
     return job
+
+
+@router.get("/transmissions/{identifier}")
+@router.get("/transmissions/{identifier}/result")
+def transmission(identifier: UUID):
+    return get_job("transmissions", identifier)
