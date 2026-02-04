@@ -119,3 +119,30 @@ def cancel(identifier: UUID):
         "cancellation_requested": jobs.cancel(str(identifier)),
         "note": "Active inference stops at its next stage boundary",
     }
+
+
+@router.delete("/transmissions/{identifier}")
+def delete_transmission(identifier: UUID):
+    job = get_job("transmissions", identifier)
+    if job["status"] in ("queued", "running"):
+        raise ApplicationError("Cancel and wait for processing before deleting", "job_active", 409)
+    result = job.get("result") or {}
+    media_ids = set()
+    for entry in (result.get("source"), result.get("receiver")):
+        if entry:
+            media_ids.add(entry["id"])
+            if entry.get("original_media_id"):
+                media_ids.add(entry["original_media_id"])
+    if job["config"].get("media_id"):
+        media_ids.add(job["config"]["media_id"])
+    for media_id in media_ids:
+        entry = store.get_media(media_id)
+        if entry:
+            Path(entry["path"]).unlink(missing_ok=True)
+            store.remove_media(media_id)
+    with store.connection() as db:
+        db.execute("DELETE FROM transmissions WHERE id=?", (str(identifier),))
+    return {
+        "deleted": str(identifier),
+        "note": "Shared source media is also deleted; other sessions may need a fresh upload",
+    }
