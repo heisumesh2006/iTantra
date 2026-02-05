@@ -7,7 +7,13 @@ from fastapi.responses import FileResponse
 from app.core.config import MAX_BYTES, RETENTION_HOURS
 from app.core.errors import ApplicationError
 from app.db import store
-from app.schemas.requests import TransmissionRequest, ChannelSweepRequest, SynthesisRequest, TranscriptionRequest
+from app.schemas.requests import (
+    TransmissionRequest,
+    ChannelSweepRequest,
+    SynthesisRequest,
+    TranscriptionRequest,
+    ExperimentRequest,
+)
 from app.services import audio, jobs
 from radio.channel import sweep
 from speech.registry import capabilities, languages
@@ -152,3 +158,9 @@ def delete_transmission(identifier: UUID):
 @router.post("/channels/simulate")
 def simulate(request: ChannelSweepRequest):
     return sweep(request)
+
+
+@router.post("/experiments/run", status_code=202)
+def experiment_run(request: ExperimentRequest):
+    audio.load(str(request.media_id))
+    return jobs.submit("experiments", request)
