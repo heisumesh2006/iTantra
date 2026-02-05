@@ -164,3 +164,8 @@ def simulate(request: ChannelSweepRequest):
 def experiment_run(request: ExperimentRequest):
     audio.load(str(request.media_id))
     return jobs.submit("experiments", request)
+
+
+@router.get("/experiments")
+def experiments():
+    return store.list_jobs("experiments")
