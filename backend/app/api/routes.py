@@ -7,8 +7,9 @@ from fastapi.responses import FileResponse
 from app.core.config import MAX_BYTES, RETENTION_HOURS
 from app.core.errors import ApplicationError
 from app.db import store
-from app.schemas.requests import TransmissionRequest, SynthesisRequest, TranscriptionRequest
+from app.schemas.requests import TransmissionRequest, ChannelSweepRequest, SynthesisRequest, TranscriptionRequest
 from app.services import audio, jobs
+from radio.channel import sweep
 from speech.registry import capabilities, languages
 from speech.providers import STT, TTS
 from transceiver.adaptive import recommend
@@ -146,3 +147,8 @@ def delete_transmission(identifier: UUID):
         "deleted": str(identifier),
         "note": "Shared source media is also deleted; other sessions may need a fresh upload",
     }
+
+
+@router.post("/channels/simulate")
+def simulate(request: ChannelSweepRequest):
+    return sweep(request)
