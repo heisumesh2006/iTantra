@@ -1,9 +1,12 @@
 from app.services.inference import INFERENCE_LOCK as MODEL_LOCK
+import csv
+import io
+import json
 from pathlib import Path
 from datetime import datetime, timezone, timedelta
 from uuid import UUID
 from fastapi import APIRouter, UploadFile, Request
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 from app.core.config import MAX_BYTES, RETENTION_HOURS
 from app.core.errors import ApplicationError
 from app.db import store
@@ -194,3 +197,44 @@ def summary():
             for j in records
         ],
     }
+
+
+@router.get("/exports/{table}/{identifier}")
+def export(table: str, identifier: UUID, format: str = "json"):
+    if table not in ("transmissions", "experiments") or format not in ("json", "csv"):
+        raise ApplicationError("Invalid export format or collection")
+    job = get_job(table, identifier)
+    if format == "json":
+        return Response(
+            json.dumps(job, ensure_ascii=False, indent=2),
+            media_type="application/json",
+            headers={"Content-Disposition": f'attachment; filename="{identifier}.json"'},
+        )
+    runs = (
+        job["result"].get("runs", [])
+        if table == "experiments" and job["result"]
+        else [job["result"]]
+        if job["result"]
+        else []
+    )
+    rows = [
+        {
+            "mode": r.get("mode"),
+            "snr_db": r.get("config", {}).get("channel_config", {}).get("snr_db", r.get("snr_db")),
+            "status": r.get("recovery_status", r.get("status")),
+            "error": r.get("error"),
+            **r.get("metrics", {}),
+        }
+        for r in runs
+    ]
+    output = io.StringIO()
+    if rows:
+        columns = sorted(set().union(*(r.keys() for r in rows)))
+        writer = csv.DictWriter(output, fieldnames=columns)
+        writer.writeheader()
+        writer.writerows(rows)
+    return Response(
+        output.getvalue(),
+        media_type="text/csv",
+        headers={"Content-Disposition": f'attachment; filename="{identifier}.csv"'},
+    )
