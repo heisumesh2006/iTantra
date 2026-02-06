@@ -169,3 +169,8 @@ def experiment_run(request: ExperimentRequest):
 @router.get("/experiments")
 def experiments():
     return store.list_jobs("experiments")
+
+
+@router.get("/experiments/{identifier}")
+def experiment(identifier: UUID):
+    return get_job("experiments", identifier)
