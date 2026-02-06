@@ -174,3 +174,23 @@ def experiments():
 @router.get("/experiments/{identifier}")
 def experiment(identifier: UUID):
     return get_job("experiments", identifier)
+
+
+@router.get("/metrics/summary")
+@router.get("/metrics/comparison")
+def summary():
+    records = [job for job in store.list_jobs("transmissions") if job["result"]]
+    return {
+        "count": len(records),
+        "runs": [
+            {
+                "id": j["id"],
+                "mode": j["result"]["mode"],
+                "language": j["config"]["language"],
+                "snr_db": j["config"]["channel_config"]["snr_db"],
+                "status": j["result"]["recovery_status"],
+                **j["result"]["metrics"],
+            }
+            for j in records
+        ],
+    }
