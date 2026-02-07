@@ -7,6 +7,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from app.core.errors import ApplicationError
+from app.core.upload_limit import RequestSizeLimitMiddleware
 from app.db import store
 from app.services.audio import cleanup
 
@@ -55,3 +56,6 @@ async def application_error(request: Request, error: ApplicationError):
     return JSONResponse(
         status_code=error.status, content={"error": {"code": error.code, "message": error.message}}
     )
+
+
+app.add_middleware(RequestSizeLimitMiddleware)
