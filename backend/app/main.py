@@ -2,7 +2,8 @@ import logging
 import asyncio
 from contextlib import suppress
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from uuid import uuid4
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from app.db import store
 from app.services.audio import cleanup
@@ -37,3 +38,11 @@ app.add_middleware(
     allow_methods=["GET", "POST", "DELETE"],
     allow_headers=["Content-Type"],
 )
+
+
+@app.middleware("http")
+async def request_id(request: Request, call_next):
+    identifier = str(uuid4())
+    response = await call_next(request)
+    response.headers["X-Request-ID"] = identifier
+    return response
