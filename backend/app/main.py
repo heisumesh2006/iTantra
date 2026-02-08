@@ -6,6 +6,7 @@ from uuid import uuid4
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from app.api.routes import router
 from app.core.errors import ApplicationError
 from app.core.upload_limit import RequestSizeLimitMiddleware
 from app.db import store
@@ -59,3 +60,4 @@ async def application_error(request: Request, error: ApplicationError):
 
 
 app.add_middleware(RequestSizeLimitMiddleware)
+app.include_router(router)
