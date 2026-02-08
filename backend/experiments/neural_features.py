@@ -2,6 +2,7 @@
 
 import numpy as np
 from scipy.signal import stft
+from torch import nn
 
 
 def log_mel_patches(audio, rate: int):
@@ -19,3 +20,10 @@ def log_mel_patches(audio, rate: int):
     )
     mel = np.log(np.maximum(filters @ abs(spectrum) ** 2, 1e-8)).astype(np.float32)
     return np.stack([mel[:, i : i + 32].reshape(-1) for i in range(0, mel.shape[1] - 31, 16)])
+
+
+class NeuralTransceiver(nn.Module):
+    def __init__(self, input_size=1280, latent_size=32):
+        super().__init__()
+        self.encoder = nn.Sequential(nn.Linear(input_size, 128), nn.GELU(), nn.Linear(128, latent_size))
+        self.decoder = nn.Sequential(nn.Linear(latent_size, 128), nn.GELU(), nn.Linear(128, input_size))
