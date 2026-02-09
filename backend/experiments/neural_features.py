@@ -2,6 +2,7 @@
 
 import numpy as np
 from scipy.signal import stft
+import torch
 from torch import nn
 
 
@@ -27,3 +28,9 @@ class NeuralTransceiver(nn.Module):
         super().__init__()
         self.encoder = nn.Sequential(nn.Linear(input_size, 128), nn.GELU(), nn.Linear(128, latent_size))
         self.decoder = nn.Sequential(nn.Linear(latent_size, 128), nn.GELU(), nn.Linear(128, input_size))
+
+    def forward(self, features, snr_db=10.0):
+        latent = self.encoder(features)
+        latent = latent / torch.sqrt(torch.mean(latent**2, dim=-1, keepdim=True) + 1e-8)
+        noise = torch.randn_like(latent) * 10 ** (-snr_db / 20)
+        return self.decoder(latent + noise)
