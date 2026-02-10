@@ -3,7 +3,7 @@ import numpy as np
 import pytest
 from app.core.errors import ApplicationError
 from app.schemas.requests import ChannelConfig
-from radio.packets import Packet, segment, reassemble
+from radio.packets import Packet, segment, reassemble, HEADER
 from radio.modulation import modulate, demodulate
 from radio.channel import transport
 from audio_codecs import semantic
@@ -61,3 +61,22 @@ def test_missing_duplicate_and_foreign_sessions():
     ):
         with pytest.raises(ApplicationError):
             reassemble(invalid)
+
+
+@pytest.mark.parametrize("modulation", ["BPSK", "QPSK"])
+@pytest.mark.parametrize("repetition", [1, 3])
+def test_exact_bit_accounting(modulation, repetition):
+    payload = b"x" * 70
+    result = transport(
+        payload,
+        uuid4(),
+        "conventional",
+        "en",
+        ChannelConfig(channel="ideal", packet_size=32, modulation=modulation, repetition=repetition),
+    )
+    m = result["metrics"]
+    assert m["payload_bits"] == 560
+    assert m["framing_overhead_bits"] == 3 * (HEADER.size + 4) * 8
+    assert m["total_transmitted_bits"] == m["framed_bits"] * repetition
+    assert m["recovered_bits"] == 560
+    assert m["packet_delivery_rate"] == 1
