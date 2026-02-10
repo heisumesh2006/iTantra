@@ -3,7 +3,7 @@ import numpy as np
 import pytest
 from app.core.errors import ApplicationError
 from app.schemas.requests import ChannelConfig
-from radio.packets import Packet, segment
+from radio.packets import Packet, segment, reassemble
 from radio.modulation import modulate, demodulate
 from radio.channel import transport
 from audio_codecs import semantic
@@ -49,3 +49,15 @@ def test_packet_crc_and_bounds():
         Packet.parse(raw[:-1])
     with pytest.raises(ApplicationError):
         segment(b"", uuid4(), "semantic", "en", 32)
+
+
+def test_missing_duplicate_and_foreign_sessions():
+    packets = segment(b"a" * 100, uuid4(), "semantic", "en", 32)
+    assert reassemble(packets[::-1]) == b"a" * 100
+    for invalid in (
+        packets[:-1],
+        packets[:-1] + [packets[0]],
+        packets[:-1] + segment(b"x" * 100, uuid4(), "semantic", "en", 32)[-1:],
+    ):
+        with pytest.raises(ApplicationError):
+            reassemble(invalid)
