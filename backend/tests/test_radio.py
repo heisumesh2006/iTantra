@@ -1,7 +1,9 @@
 from uuid import uuid4
 import numpy as np
 import pytest
+from app.core.errors import ApplicationError
 from app.schemas.requests import ChannelConfig
+from radio.packets import Packet, segment
 from radio.modulation import modulate, demodulate
 from radio.channel import transport
 from audio_codecs import semantic
@@ -33,3 +35,17 @@ def test_unicode_transport(language, text):
     assert result["payload"] == payload
     assert semantic.decode(result["payload"])["text"] == text * 30
     assert result["metrics"]["raw_ber"] == 0
+
+
+def test_packet_crc_and_bounds():
+    packet = segment(b"abcdef", uuid4(), "semantic", "kn", 32)[0]
+    raw = packet.serialize()
+    assert Packet.parse(raw) == packet
+    corrupt = bytearray(raw)
+    corrupt[-5] ^= 1
+    with pytest.raises(ApplicationError, match="CRC"):
+        Packet.parse(bytes(corrupt))
+    with pytest.raises(ApplicationError):
+        Packet.parse(raw[:-1])
+    with pytest.raises(ApplicationError):
+        segment(b"", uuid4(), "semantic", "en", 32)
