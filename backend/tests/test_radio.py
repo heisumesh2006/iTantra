@@ -1,11 +1,12 @@
 from uuid import uuid4
 import numpy as np
 import pytest
+from scipy.special import erfc
 from app.core.errors import ApplicationError
 from app.schemas.requests import ChannelConfig
 from radio.packets import Packet, segment, reassemble, HEADER
 from radio.modulation import modulate, demodulate
-from radio.channel import transport
+from radio.channel import transport, apply_channel
 from audio_codecs import semantic
 
 
@@ -80,3 +81,17 @@ def test_exact_bit_accounting(modulation, repetition):
     assert m["total_transmitted_bits"] == m["framed_bits"] * repetition
     assert m["recovered_bits"] == 560
     assert m["packet_delivery_rate"] == 1
+
+
+@pytest.mark.parametrize("modulation", ["BPSK", "QPSK"])
+def test_awgn_agrees_with_theory(modulation):
+    rng = np.random.default_rng(99)
+    bits = rng.integers(0, 2, 400000, dtype=np.uint8)
+    symbols, padding = modulate(bits, modulation)
+    snr = 3
+    _, equalized = apply_channel(symbols, "awgn", snr, rng)
+    empirical = np.mean(bits != demodulate(equalized, modulation, padding))
+    bps = 1 if modulation == "BPSK" else 2
+    p = float(0.5 * erfc(np.sqrt(10 ** (snr / 10) / bps)))
+    tolerance = 6 * np.sqrt(p * (1 - p) / len(bits))
+    assert abs(empirical - p) < tolerance
