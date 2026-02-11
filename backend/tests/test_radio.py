@@ -1,4 +1,4 @@
-from uuid import uuid4
+from uuid import UUID, uuid4
 import numpy as np
 import pytest
 from scipy.special import erfc
@@ -105,3 +105,15 @@ def test_awgn_noise_energy_and_rayleigh_reference():
     _, equalized = apply_channel(symbols, "rayleigh", 5, rng)
     p = 0.5 * (1 - np.sqrt(10**0.5 / (1 + 10**0.5)))
     assert np.mean(equalized.real < 0) == pytest.approx(p, abs=0.002)
+
+
+def test_seed_reproducibility_and_erasure():
+    session = UUID(int=42)
+    config = ChannelConfig(snr_db=2)
+    a = transport(b"x" * 300, session, "semantic", "en", config)
+    b = transport(b"x" * 300, session, "semantic", "en", config)
+    assert a["packets"] == b["packets"] and a["constellation"] == b["constellation"]
+    assert a["metrics"]["raw_ber"] == b["metrics"]["raw_ber"]
+    lost = transport(b"x" * 300, session, "semantic", "en", ChannelConfig(erasure_rate=1))
+    assert lost["payload"] is None and lost["metrics"]["raw_ber"] is None
+    assert lost["metrics"]["packet_delivery_rate"] == 0
