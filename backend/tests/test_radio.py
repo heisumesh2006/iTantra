@@ -95,3 +95,13 @@ def test_awgn_agrees_with_theory(modulation):
     p = float(0.5 * erfc(np.sqrt(10 ** (snr / 10) / bps)))
     tolerance = 6 * np.sqrt(p * (1 - p) / len(bits))
     assert abs(empirical - p) < tolerance
+
+
+def test_awgn_noise_energy_and_rayleigh_reference():
+    rng = np.random.default_rng(11)
+    symbols = np.ones(400000, dtype=np.complex128)
+    received, _ = apply_channel(symbols, "awgn", 5, rng)
+    assert np.mean(np.abs(received - symbols) ** 2) == pytest.approx(10 ** (-0.5), rel=0.012)
+    _, equalized = apply_channel(symbols, "rayleigh", 5, rng)
+    p = 0.5 * (1 - np.sqrt(10**0.5 / (1 + 10**0.5)))
+    assert np.mean(equalized.real < 0) == pytest.approx(p, abs=0.002)
