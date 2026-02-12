@@ -117,3 +117,11 @@ def test_seed_reproducibility_and_erasure():
     lost = transport(b"x" * 300, session, "semantic", "en", ChannelConfig(erasure_rate=1))
     assert lost["payload"] is None and lost["metrics"]["raw_ber"] is None
     assert lost["metrics"]["packet_delivery_rate"] == 0
+
+
+def test_controlled_corruption_is_not_recovered():
+    result = transport(
+        b"Unicode valid source", uuid4(), "semantic", "en", ChannelConfig(channel="ideal", bit_flip_rate=0.5)
+    )
+    assert result["payload"] is None
+    assert result["metrics"]["raw_ber"] > 0.35
