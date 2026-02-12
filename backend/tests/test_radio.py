@@ -132,3 +132,10 @@ def test_repetition_majority_corrects_one_of_three():
     coded = np.repeat(bits, 3)
     coded[::3] ^= 1
     np.testing.assert_array_equal(coded.reshape(-1, 3).sum(1) >= 2, bits)
+
+
+def test_semantic_decompression_bomb_rejected():
+    import zlib
+
+    with pytest.raises(ApplicationError):
+        semantic.decode(b"SC1Z" + zlib.compress(b"x" * 100000))
