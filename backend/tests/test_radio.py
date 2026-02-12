@@ -125,3 +125,10 @@ def test_controlled_corruption_is_not_recovered():
     )
     assert result["payload"] is None
     assert result["metrics"]["raw_ber"] > 0.35
+
+
+def test_repetition_majority_corrects_one_of_three():
+    bits = np.array([0, 1, 1, 0], dtype=np.uint8)
+    coded = np.repeat(bits, 3)
+    coded[::3] ^= 1
+    np.testing.assert_array_equal(coded.reshape(-1, 3).sum(1) >= 2, bits)
