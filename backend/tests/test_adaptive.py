@@ -24,3 +24,9 @@ def test_low_budget_meaning_prefers_verified_semantics(monkeypatch):
 def test_missing_speech_prefers_installed_neural(monkeypatch):
     monkeypatch.setattr(adaptive, "capabilities", lambda: cap(False, True))
     assert adaptive.recommend(TransmissionRequest(mode="adaptive", budget_kbps=3))["mode"] == "neural"
+
+
+def test_absent_ml_falls_back_to_real_conventional(monkeypatch):
+    monkeypatch.setattr(adaptive, "capabilities", lambda: cap(False, False))
+    result = adaptive.recommend(TransmissionRequest(mode="adaptive", budget_kbps=3))
+    assert result["mode"] == "conventional" and result["reason"]
