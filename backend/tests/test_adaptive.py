@@ -19,3 +19,8 @@ def cap(speech=True, neural=True):
 def test_low_budget_meaning_prefers_verified_semantics(monkeypatch):
     monkeypatch.setattr(adaptive, "capabilities", lambda: cap())
     assert adaptive.recommend(TransmissionRequest(mode="adaptive", budget_kbps=2))["mode"] == "semantic"
+
+
+def test_missing_speech_prefers_installed_neural(monkeypatch):
+    monkeypatch.setattr(adaptive, "capabilities", lambda: cap(False, True))
+    assert adaptive.recommend(TransmissionRequest(mode="adaptive", budget_kbps=3))["mode"] == "neural"
