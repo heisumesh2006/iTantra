@@ -5,6 +5,7 @@ import soundfile as sf
 from fastapi.testclient import TestClient
 from app.main import app
 from app.services.audio import resample
+from audio_codecs import conventional
 
 
 @pytest.fixture
@@ -32,3 +33,12 @@ def test_resample_frequency_and_length():
     y = resample(x, 16000, 24000)
     assert len(y) == 24000
     assert np.argmax(abs(np.fft.rfft(y))) == 440
+
+
+def test_real_opus_roundtrip():
+    _, x = wav()
+    payload = conventional.encode(x, 16000)
+    output, rate = conventional.decode(payload)
+    assert payload[:4] == b"OggS" and len(payload) < len(x) * 2
+    assert rate == 16000 and abs(len(output) - len(x)) < 320
+    assert np.isfinite(output).all() and np.std(output) > 0.01
