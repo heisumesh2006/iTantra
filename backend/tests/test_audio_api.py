@@ -1,4 +1,5 @@
 import io
+import time
 import numpy as np
 import pytest
 import soundfile as sf
@@ -51,3 +52,33 @@ def test_health_validation_and_safe_media_ids(client):
     assert client.post("/api/v1/channels/simulate", json={"config": {"packet_size": 1}}).status_code == 422
     assert client.post("/api/v1/audio", files={"file": ("danger.exe", b"bad")}).status_code == 400
     assert client.post("/api/v1/audio", files={"file": ("bad.wav", b"not audio")}).status_code == 400
+
+
+def test_upload_transmission_persistence_and_failure(client):
+    raw, _ = wav()
+    response = client.post("/api/v1/audio", files={"file": ("source.wav", raw, "audio/wav")})
+    assert response.status_code == 201
+    media = response.json()
+    assert media["sample_rate"] == 16000
+    assert client.get(media["url"]).status_code == 200
+    for channel, expected in [
+        ({"channel": "ideal"}, "recovered"),
+        ({"channel": "ideal", "erasure_rate": 1}, "failed"),
+    ]:
+        response = client.post(
+            "/api/v1/transmissions",
+            json={"media_id": media["id"], "mode": "conventional", "channel_config": channel},
+        )
+        assert response.status_code == 202
+        identifier = response.json()["id"]
+        for _ in range(120):
+            job = client.get("/api/v1/transmissions/" + identifier).json()
+            if job["status"] not in ("queued", "running"):
+                break
+            time.sleep(0.05)
+        assert job["status"] == "completed", job
+        assert job["result"]["recovery_status"] == expected
+        if expected == "failed":
+            assert job["result"]["receiver"] is None
+        assert client.get(f"/api/v1/exports/transmissions/{identifier}?format=csv").status_code == 200
+        assert any(j["id"] == identifier for j in client.get("/api/v1/transmissions").json())
