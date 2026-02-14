@@ -42,3 +42,12 @@ def test_real_opus_roundtrip():
     assert payload[:4] == b"OggS" and len(payload) < len(x) * 2
     assert rate == 16000 and abs(len(output) - len(x)) < 320
     assert np.isfinite(output).all() and np.std(output) > 0.01
+
+
+def test_health_validation_and_safe_media_ids(client):
+    assert client.get("/api/v1/health").json()["simulation_mode"] is True
+    assert client.get("/api/v1/media/not-a-uuid").status_code == 422
+    assert client.post("/api/v1/transmissions", json={}).status_code == 400
+    assert client.post("/api/v1/channels/simulate", json={"config": {"packet_size": 1}}).status_code == 422
+    assert client.post("/api/v1/audio", files={"file": ("danger.exe", b"bad")}).status_code == 400
+    assert client.post("/api/v1/audio", files={"file": ("bad.wav", b"not audio")}).status_code == 400
