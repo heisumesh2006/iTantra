@@ -102,3 +102,12 @@ def test_unicode_metrics():
     assert text_scores("ನಮಸ್ಕಾರ ಜಗತ್ತು", "ನಮಸ್ಕಾರ ಜಗತ್ತು") == {"wer": 0, "cer": 0}
     assert text_scores(None, "text") == {"wer": None, "cer": None}
     assert text_scores("hello world", "hello")["wer"] == 0.5
+
+
+def test_body_limit_applies_before_form_parsing(client):
+    response = client.post(
+        "/api/v1/audio",
+        content=b"x",
+        headers={"Content-Length": "99999999", "Content-Type": "application/octet-stream"},
+    )
+    assert response.status_code == 413
