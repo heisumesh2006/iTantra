@@ -6,6 +6,7 @@ import soundfile as sf
 from fastapi.testclient import TestClient
 from app.main import app
 from app.services.audio import resample
+from app.services.metrics import text_scores
 from audio_codecs import conventional
 
 
@@ -95,3 +96,9 @@ def test_missing_provider_and_silence(client, monkeypatch):
     assert response.status_code == 503 and response.json()["error"]["code"] == "model_unavailable"
     with pytest.raises(Exception, match="silent"):
         providers.STT.transcribe(np.zeros(16000), 16000, "en")
+
+
+def test_unicode_metrics():
+    assert text_scores("ನಮಸ್ಕಾರ ಜಗತ್ತು", "ನಮಸ್ಕಾರ ಜಗತ್ತು") == {"wer": 0, "cer": 0}
+    assert text_scores(None, "text") == {"wer": None, "cer": None}
+    assert text_scores("hello world", "hello")["wer"] == 0.5
