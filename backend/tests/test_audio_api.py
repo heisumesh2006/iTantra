@@ -82,3 +82,16 @@ def test_upload_transmission_persistence_and_failure(client):
             assert job["result"]["receiver"] is None
         assert client.get(f"/api/v1/exports/transmissions/{identifier}?format=csv").status_code == 200
         assert any(j["id"] == identifier for j in client.get("/api/v1/transmissions").json())
+
+
+def test_missing_provider_and_silence(client, monkeypatch):
+    from speech import providers
+
+    monkeypatch.setattr(
+        providers, "tts_path", lambda language: __import__("pathlib").Path("nonexistent-test-provider")
+    )
+    providers.mms.cache_clear()
+    response = client.post("/api/v1/speech/synthesize", json={"text": "hello", "language": "ta"})
+    assert response.status_code == 503 and response.json()["error"]["code"] == "model_unavailable"
+    with pytest.raises(Exception, match="silent"):
+        providers.STT.transcribe(np.zeros(16000), 16000, "en")
