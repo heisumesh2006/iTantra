@@ -129,3 +129,23 @@ def test_media_retention_and_artifact_deletion(client):
     cleanup()
     assert client.get(media["url"]).status_code == 404
     assert store.get_media(media["id"]) is None
+
+
+def test_receiver_keeps_recovered_text_when_tts_fails(monkeypatch):
+    from app.core.errors import ApplicationError
+    from app.schemas.requests import TransmissionRequest, ChannelConfig
+    from transceiver import pipeline
+
+    def unavailable(text, language):
+        raise ApplicationError("Test provider deliberately unavailable", "model_unavailable", 503)
+
+    monkeypatch.setattr(pipeline.TTS, "synthesize", unavailable)
+    request = TransmissionRequest(
+        mode="semantic", text="ನಮಸ್ಕಾರ", language="kn", channel_config=ChannelConfig(channel="ideal")
+    )
+    result = pipeline.execute(request)
+    assert result["recovered_text"] == "ನಮಸ್ಕಾರ"
+    assert result["recovery_status"] == "recovered"
+    assert result["receiver"] is None
+    assert result["reconstruction_status"] == "failed"
+    assert result["reconstruction_error"] == "Test provider deliberately unavailable"
