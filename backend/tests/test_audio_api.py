@@ -111,3 +111,8 @@ def test_body_limit_applies_before_form_parsing(client):
         headers={"Content-Length": "99999999", "Content-Type": "application/octet-stream"},
     )
     assert response.status_code == 413
+
+
+def test_invalid_snr_sweeps_rejected(client):
+    response = client.post("/api/v1/channels/simulate", json={"snr_values": [100]})
+    assert response.status_code == 422
