@@ -116,3 +116,16 @@ def test_body_limit_applies_before_form_parsing(client):
 def test_invalid_snr_sweeps_rejected(client):
     response = client.post("/api/v1/channels/simulate", json={"snr_values": [100]})
     assert response.status_code == 422
+
+
+def test_media_retention_and_artifact_deletion(client):
+    from app.db import store
+    from app.services.audio import cleanup
+
+    raw, _ = wav()
+    media = client.post("/api/v1/audio", files={"file": ("source.wav", raw, "audio/wav")}).json()
+    with store.connection() as db:
+        db.execute("UPDATE media SET created_at='2000-01-01T00:00:00+00:00'")
+    cleanup()
+    assert client.get(media["url"]).status_code == 404
+    assert store.get_media(media["id"]) is None
