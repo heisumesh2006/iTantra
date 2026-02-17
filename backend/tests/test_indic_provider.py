@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 from app.core.errors import ApplicationError
-from speech import providers
+from speech import providers, registry
 from speech.indic_ctc import VakyanshKannadaProvider, kannada_model
 
 
@@ -36,3 +36,16 @@ def test_router_keeps_non_kannada_whisper(monkeypatch):
     monkeypatch.setattr(router.whisper_provider, "transcribe", observed)
     with pytest.raises(ApplicationError, match="Whisper route reached: hi"):
         router.transcribe(np.ones(16000), 16000, "hi")
+
+
+def test_roundtrip_status_is_tied_to_selected_model(monkeypatch):
+    monkeypatch.setattr(registry, "KANNADA_STT", "vakyansh")
+    monkeypatch.setattr(registry, "has_weights", lambda path: True)
+    monkeypatch.setattr(
+        registry,
+        "verified",
+        lambda: {"stt_model": "whisper-small", "semantic_verified": ["kn"], "tts": ["kn"]},
+    )
+    entry = next(item for item in registry.languages() if item["code"] == "kn")
+    assert entry["stt_verified"] is False and entry["roundtrip_verified"] is False
+    assert entry["stt_model"] == registry.KANNADA_MODEL
