@@ -1,0 +1,17 @@
+:root {
+  font-family:
+    "DM Sans",
+    Segoe UI,
+    Nirmala UI,
+    sans-serif;
+  color: #e8edf7;
+  background: #090e19;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --cyan: #58dfd5;
+  --violet: #a091f6;
+  --muted: #929db2;
+  --border: #233044;
+  --panel: #101827;
+  --bg: #090e19;
+}
