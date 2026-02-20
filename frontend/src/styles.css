@@ -73,3 +73,57 @@ p {
   line-height: 1.65;
   font-size: 14px;
 }
+button,
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: var(--cyan);
+  color: #062421;
+  padding: 11px 16px;
+  font-weight: 600;
+  font-size: 13px;
+  transition:
+    background 0.16s,
+    transform 0.16s;
+}
+button:hover:not(:disabled),
+.button:hover {
+  background: #7cece4;
+  transform: translateY(-1px);
+}
+.secondary {
+  background: #172134;
+  color: #d5deef;
+  border-color: #2a3850;
+}
+.secondary:hover:not(:disabled) {
+  background: #213049;
+}
+.button-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.text-link {
+  background: none;
+  border: 0;
+  padding: 8px 0;
+  color: var(--cyan);
+  font-size: 12px;
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+.text-link:hover:not(:disabled) {
+  background: none;
+  color: #a0f4ec;
+}
+.full {
+  width: 100%;
+  margin-top: 12px;
+}
