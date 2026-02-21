@@ -168,3 +168,13 @@ button:hover:not(:disabled),
   margin-top: 4px;
   font-weight: 600;
 }
+.nav-label,
+.eyebrow {
+  color: #8796ae;
+  font-size: 9px;
+  letter-spacing: 1.8px;
+  font-weight: 600;
+}
+.nav-label {
+  margin: 0 13px 17px;
+}
