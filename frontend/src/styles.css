@@ -141,3 +141,30 @@ button:hover:not(:disabled),
   flex-direction: column;
   padding: 32px 20px;
 }
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-size: 28px;
+  font-weight: 750;
+  margin: 0 6px 44px;
+  letter-spacing: -1px;
+}
+.brand-mark {
+  width: 43px;
+  height: 43px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: #123332;
+  color: var(--cyan);
+  border: 1px solid #285753;
+}
+.brand small {
+  display: block;
+  font-size: 7.5px;
+  letter-spacing: 1.65px;
+  color: #8e9cb3;
+  margin-top: 4px;
+  font-weight: 600;
+}
