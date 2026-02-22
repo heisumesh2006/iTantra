@@ -178,3 +178,37 @@ button:hover:not(:disabled),
 .nav-label {
   margin: 0 13px 17px;
 }
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+nav a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #99a6bb;
+  padding: 13px 12px;
+  font-size: 12px;
+  border-radius: 7px;
+  border: 1px solid transparent;
+}
+nav a:hover {
+  background: #141e2e;
+  color: white;
+}
+nav a.active {
+  color: var(--cyan);
+  background: #112c31;
+  border-color: #254548;
+}
+nav a.active svg {
+  stroke-width: 1.7;
+}
+.nav-dot {
+  margin-left: auto;
+  height: 5px;
+  width: 5px;
+  background: var(--cyan);
+  border-radius: 50%;
+}
