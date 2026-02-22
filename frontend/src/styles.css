@@ -212,3 +212,48 @@ nav a.active svg {
   background: var(--cyan);
   border-radius: 50%;
 }
+.sidebar-bottom {
+  margin-top: auto;
+  padding: 24px 12px 0;
+}
+.local-badge {
+  color: #85b7aa;
+  font-size: 8px;
+  letter-spacing: 1px;
+  display: flex;
+  gap: 7px;
+  align-items: center;
+}
+.local-badge i,
+.badge i,
+.hero-tag i,
+.connection i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #66dca8;
+}
+.sidebar-bottom p {
+  font-size: 11px;
+  line-height: 1.6;
+}
+.sidebar-bottom a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #a1aec4;
+  font-size: 11px;
+}
+.sidebar-version {
+  border-top: 1px solid var(--border);
+  margin-top: 25px;
+  padding-top: 16px;
+  font-size: 10px;
+  color: #73839b;
+  display: flex;
+  justify-content: space-between;
+}
+.sidebar-version span {
+  font-size: 8px;
+  color: #58bb9c;
+}
