@@ -257,3 +257,15 @@ nav a.active svg {
   font-size: 8px;
   color: #58bb9c;
 }
+.main-shell {
+  margin-left: 248px;
+}
+.topbar {
+  height: 78px;
+  border-bottom: 1px solid #1c293b;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  background: #0b111d;
+}
