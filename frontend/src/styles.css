@@ -269,3 +269,26 @@ nav a.active svg {
   padding: 0 40px;
   background: #0b111d;
 }
+.breadcrumb {
+  color: #8d9ab0;
+  font-size: 9px;
+  letter-spacing: 1.4px;
+}
+.breadcrumb span {
+  color: #3e4c63;
+  margin: 0 14px;
+}
+.topbar-status {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+.simulation-label {
+  font-size: 8px;
+  letter-spacing: 1.25px;
+  color: #d7b88d;
+  border: 1px solid #4b3f2e;
+  background: #282216;
+  padding: 6px 9px;
+  border-radius: 4px;
+}
