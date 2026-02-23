@@ -292,3 +292,30 @@ nav a.active svg {
   padding: 6px 9px;
   border-radius: 4px;
 }
+.connection {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+  color: #db9c93;
+}
+.connection i {
+  background: #e48680;
+}
+.connection.online {
+  color: #9bbbaa;
+}
+.connection.online i {
+  background: #65d5a9;
+}
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #1d2d40;
+  color: #90aec3;
+  display: grid;
+  place-items: center;
+  font-size: 10px;
+  border: 1px solid #36485c;
+}
