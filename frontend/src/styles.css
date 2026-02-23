@@ -319,3 +319,8 @@ nav a.active svg {
   font-size: 10px;
   border: 1px solid #36485c;
 }
+main {
+  padding: 35px 40px 0;
+  max-width: 1680px;
+  margin: auto;
+}
