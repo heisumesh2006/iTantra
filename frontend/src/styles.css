@@ -366,3 +366,25 @@ main {
   position: relative;
   z-index: 1;
 }
+.hero .button-row {
+  position: relative;
+  z-index: 1;
+}
+.hero .button {
+  padding: 13px 17px;
+  font-size: 12px;
+}
+.hero-footnote {
+  color: #8290a7;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 10px;
+  margin-top: 23px;
+}
+.hero-footnote svg {
+  color: #709f96;
+}
+.hero-footnote span {
+  margin: 0 2px;
+}
