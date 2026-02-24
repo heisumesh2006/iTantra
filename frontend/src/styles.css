@@ -423,3 +423,41 @@ main {
   top: 22px;
   border-color: #23364966;
 }
+.orb-core {
+  position: absolute;
+  left: 174px;
+  top: 155px;
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, #214b51, #112130);
+  border-radius: 23px;
+  border: 1px solid #44777c;
+  display: grid;
+  place-items: center;
+  color: var(--cyan);
+  box-shadow: 0 0 60px #4edccd13;
+  transform: rotate(-8deg);
+}
+.orb-core svg {
+  transform: rotate(8deg);
+}
+.satellite {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  background: #15293b;
+  border: 1px solid #365266;
+  border-radius: 13px;
+  color: #78bfc1;
+}
+.s1 {
+  left: 49px;
+  top: 239px;
+}
+.s2 {
+  right: 45px;
+  top: 105px;
+  color: #b3a1f8;
+}
