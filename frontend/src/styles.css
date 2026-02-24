@@ -388,3 +388,38 @@ main {
 .hero-footnote span {
   margin: 0 2px;
 }
+.orbital-visual {
+  position: absolute;
+  width: 450px;
+  height: 430px;
+  right: -15px;
+  top: 15px;
+  background: radial-gradient(ellipse at center, #163c4933 0%, transparent 66%);
+}
+.orbit {
+  border: 1px solid #36627255;
+  position: absolute;
+  border-radius: 50%;
+  transform: rotate(-27deg);
+}
+.o1 {
+  width: 375px;
+  height: 175px;
+  left: 36px;
+  top: 120px;
+}
+.o2 {
+  width: 295px;
+  height: 295px;
+  left: 77px;
+  top: 60px;
+  border-style: dashed;
+  border-color: #283b5255;
+}
+.o3 {
+  width: 405px;
+  height: 360px;
+  left: 20px;
+  top: 22px;
+  border-color: #23364966;
+}
