@@ -505,3 +505,9 @@ main {
   letter-spacing: 1.5px;
   color: #667b93;
 }
+.cyan {
+  color: var(--cyan) !important;
+}
+.violet-text {
+  color: var(--violet);
+}
