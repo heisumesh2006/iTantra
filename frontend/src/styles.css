@@ -461,3 +461,21 @@ main {
   top: 105px;
   color: #b3a1f8;
 }
+.orbit-label {
+  position: absolute;
+  font-size: 7px;
+  letter-spacing: 1.5px;
+  color: #7393a6;
+}
+.l1 {
+  left: 38px;
+  top: 307px;
+}
+.l2 {
+  right: 8px;
+  top: 84px;
+}
+.l3 {
+  left: 136px;
+  top: 376px;
+}
