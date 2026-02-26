@@ -521,3 +521,23 @@ main {
   font-size: 25px;
   margin-top: 9px;
 }
+.panel {
+  background: linear-gradient(140deg, #121b2c, #101726);
+  border: 1px solid #263147;
+  border-radius: 11px;
+  padding: 24px;
+  margin-bottom: 22px;
+  min-width: 0;
+  box-shadow: 0 7px 20px #0000000b;
+}
+.panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 23px;
+}
+.panel-heading h2 {
+  margin-top: 7px;
+  font-size: 17px;
+}
