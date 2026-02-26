@@ -511,3 +511,13 @@ main {
 .violet-text {
   color: var(--violet);
 }
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  margin: 32px 0 20px;
+}
+.section-heading h2 {
+  font-size: 25px;
+  margin-top: 9px;
+}
