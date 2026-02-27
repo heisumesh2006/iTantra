@@ -593,3 +593,24 @@ main {
 .script-display span {
   color: #76d8cf;
 }
+.page-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin: 9px 0 30px;
+}
+.page-title h1 {
+  font-size: 32px;
+  font-weight: 650;
+  margin: 10px 0 12px;
+  line-height: 1.2;
+}
+.title-dot {
+  color: var(--cyan);
+}
+.page-title p {
+  margin: 0;
+  font-size: 12px;
+  max-width: 680px;
+}
