@@ -551,3 +551,24 @@ main {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 22px;
 }
+.mode-card {
+  display: block;
+  transition:
+    border-color 0.2s,
+    transform 0.2s;
+}
+.mode-card:hover {
+  border-color: #48716e;
+  transform: translateY(-3px);
+}
+.mode-card > svg {
+  margin: 28px 0 17px;
+}
+.mode-card p {
+  font-size: 12px;
+  line-height: 1.8;
+  min-height: 68px;
+}
+.mode-card h3 {
+  font-size: 22px;
+}
