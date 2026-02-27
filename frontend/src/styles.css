@@ -572,3 +572,24 @@ main {
 .mode-card h3 {
   font-size: 22px;
 }
+.split-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+  font-size: 10px;
+  color: #8c9bb4;
+}
+.script-display {
+  font-family:
+    Nirmala UI,
+    Segoe UI,
+    sans-serif;
+  font-size: 24px;
+  color: #d4def2;
+  line-height: 1.9;
+  margin: 12px 0;
+}
+.script-display span {
+  color: #76d8cf;
+}
