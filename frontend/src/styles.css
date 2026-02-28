@@ -653,3 +653,38 @@ main {
   background: #292440;
   border-color: #4b406c;
 }
+.capture-zone {
+  padding: 26px 12px 23px;
+  text-align: center;
+  border: 1px dashed #36465d;
+  border-radius: 9px;
+  background: #0d1524;
+}
+.capture-icon {
+  color: #72b3bf;
+  background: #152f3b;
+  border: 1px solid #284d5b;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  margin: 0 auto 15px;
+}
+.capture-zone strong {
+  font-size: 12px;
+  font-weight: 500;
+  display: block;
+}
+.capture-zone p {
+  font-size: 9px;
+  margin: 7px 0 19px;
+}
+.capture-zone .button-row {
+  justify-content: center;
+  gap: 7px;
+}
+.capture-zone button {
+  font-size: 10px;
+  padding: 10px 11px;
+}
