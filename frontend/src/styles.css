@@ -614,3 +614,16 @@ main {
   font-size: 12px;
   max-width: 680px;
 }
+.badge {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  white-space: nowrap;
+  color: #9bcaba;
+  font-size: 8px;
+  letter-spacing: 1px;
+  border: 1px solid #284740;
+  border-radius: 5px;
+  padding: 8px 10px;
+  background: #102620;
+}
