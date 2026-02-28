@@ -636,3 +636,20 @@ main {
 .studio-grid .panel {
   padding: 20px;
 }
+.node-indicator {
+  width: 29px;
+  height: 29px;
+  border: 1px solid #375a5c;
+  background: #163338;
+  border-radius: 7px;
+  color: var(--cyan);
+  display: grid;
+  place-items: center;
+  font-size: 9px;
+  font-weight: 700;
+}
+.node-indicator.violet {
+  color: var(--violet);
+  background: #292440;
+  border-color: #4b406c;
+}
