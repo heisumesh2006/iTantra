@@ -717,3 +717,12 @@ audio {
   margin: 8px 0 10px;
   color-scheme: dark;
 }
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 22px;
+}
+.form-section label {
+  margin: 0;
+}
