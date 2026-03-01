@@ -688,3 +688,32 @@ main {
   font-size: 10px;
   padding: 10px 11px;
 }
+.audio-preview {
+  margin-top: 20px;
+}
+.waveform {
+  height: 68px;
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  overflow: hidden;
+  background: #0a1321;
+  border: 1px solid #203347;
+  border-radius: 6px;
+  padding: 8px;
+  margin: 12px 0;
+}
+.waveform i {
+  display: block;
+  flex: 1;
+  min-width: 1px;
+  background: #63c6c9;
+  border-radius: 1px;
+  opacity: 0.85;
+}
+audio {
+  width: 100%;
+  height: 34px;
+  margin: 8px 0 10px;
+  color-scheme: dark;
+}
