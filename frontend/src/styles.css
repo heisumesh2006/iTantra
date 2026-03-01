@@ -726,3 +726,33 @@ audio {
 .form-section label {
   margin: 0;
 }
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  font-size: 10px;
+  color: #adbad0;
+  margin-bottom: 15px;
+}
+input,
+select,
+textarea {
+  width: 100%;
+  background: #0c1422;
+  border: 1px solid #2a3950;
+  border-radius: 6px;
+  padding: 11px 10px;
+  color: #e3eafa;
+  min-width: 0;
+  font-size: 11px;
+}
+select {
+  cursor: pointer;
+}
+textarea {
+  min-height: 100px;
+  resize: vertical;
+  line-height: 1.8;
+  font-size: 14px;
+  font-family: inherit;
+}
