@@ -771,3 +771,19 @@ input[type="checkbox"] {
   flex-direction: row;
   align-items: center;
 }
+.capability-line {
+  display: flex;
+  gap: 8px;
+  font-size: 8px;
+  margin-top: -7px;
+}
+.capability-line span {
+  padding: 4px 6px;
+  background: #202a3c;
+  color: #9ca9be;
+  border-radius: 4px;
+}
+.capability-line .positive {
+  background: #12332c;
+  color: #7bd4b4;
+}
