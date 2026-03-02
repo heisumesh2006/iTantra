@@ -756,3 +756,18 @@ textarea {
   font-size: 14px;
   font-family: inherit;
 }
+input[type="range"] {
+  padding: 0;
+  accent-color: var(--cyan);
+  height: 16px;
+  border: none;
+}
+input[type="checkbox"] {
+  width: auto;
+  accent-color: var(--cyan);
+}
+.check {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
