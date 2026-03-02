@@ -787,3 +787,24 @@ input[type="checkbox"] {
   background: #12332c;
   color: #7bd4b4;
 }
+.radio-visual {
+  height: 118px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  border-radius: 7px;
+  border: 1px solid #24344a;
+  background: radial-gradient(ellipse at center, #14364b, #0b1423);
+}
+.radio-node {
+  width: 35px;
+  height: 35px;
+  margin: 0 12px;
+  border-radius: 50%;
+  background: #14333a;
+  border: 1px solid #3b6a71;
+  color: #8adfdc;
+  display: grid;
+  place-items: center;
+  font-size: 10px;
+}
