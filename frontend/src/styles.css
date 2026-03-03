@@ -871,3 +871,21 @@ input[type="checkbox"] {
   font-size: 8px;
   font-weight: 400;
 }
+.controls-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 14px;
+}
+.controls-grid label {
+  margin-bottom: 0;
+}
+.span-two {
+  grid-column: span 2;
+}
+.range-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 7px;
+  color: #687a95;
+}
