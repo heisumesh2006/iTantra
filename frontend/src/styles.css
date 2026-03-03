@@ -808,3 +808,46 @@ input[type="checkbox"] {
   place-items: center;
   font-size: 10px;
 }
+.signal-line {
+  position: relative;
+  flex: 1;
+  border-top: 1px dashed #4b797f;
+  height: 1px;
+}
+.signal-line i {
+  width: 4px;
+  height: 4px;
+  background: var(--cyan);
+  border-radius: 50%;
+  position: absolute;
+  top: -3px;
+  opacity: 0.5;
+}
+.signal-line i:nth-child(1) {
+  left: 15%;
+}
+.signal-line i:nth-child(2) {
+  left: 50%;
+}
+.signal-line i:nth-child(3) {
+  left: 85%;
+}
+.transmitting .signal-line i {
+  animation: transmit 1.5s linear infinite;
+}
+.transmitting .signal-line i:nth-child(2) {
+  animation-delay: 0.5s;
+}
+.transmitting .signal-line i:nth-child(3) {
+  animation-delay: 1s;
+}
+@keyframes transmit {
+  from {
+    left: 0%;
+    opacity: 0.2;
+  }
+  to {
+    left: 100%;
+    opacity: 1;
+  }
+}
