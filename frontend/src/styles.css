@@ -851,3 +851,23 @@ input[type="checkbox"] {
     opacity: 1;
   }
 }
+.link-state {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
+  margin-top: 16px;
+  font-size: 10px;
+}
+.link-state span {
+  font-size: 8px;
+  letter-spacing: 1px;
+  border: 1px solid #33445a;
+  padding: 5px 8px;
+  border-radius: 4px;
+  color: #a8b8d0;
+}
+.link-state small {
+  font-size: 8px;
+  font-weight: 400;
+}
