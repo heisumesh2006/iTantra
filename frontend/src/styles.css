@@ -902,3 +902,24 @@ input[type="checkbox"] {
 .start-button > svg:first-child {
   margin-right: auto;
 }
+.stages {
+  padding-top: 24px;
+}
+.stages > div {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 10px;
+  color: #9fb2c8;
+  margin: 12px 0;
+}
+.stages i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #63c7af;
+}
+.stages i.active {
+  background: #e0bb74;
+  box-shadow: 0 0 10px #e0bb7466;
+}
