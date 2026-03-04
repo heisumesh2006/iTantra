@@ -889,3 +889,16 @@ input[type="checkbox"] {
   font-size: 7px;
   color: #687a95;
 }
+.start-button {
+  width: 100%;
+  margin-top: 25px;
+  padding: 14px 10px;
+  background: linear-gradient(100deg, #61dfd4, #49c6d2);
+  font-size: 12px;
+}
+.start-button > svg:last-child {
+  margin-left: auto;
+}
+.start-button > svg:first-child {
+  margin-right: auto;
+}
