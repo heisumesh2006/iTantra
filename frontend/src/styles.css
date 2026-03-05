@@ -944,3 +944,10 @@ input[type="checkbox"] {
 .studio-grid .empty {
   min-height: 370px;
 }
+.muted {
+  color: var(--muted);
+}
+.small {
+  font-size: 10px !important;
+  line-height: 1.7;
+}
