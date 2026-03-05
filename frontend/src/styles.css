@@ -951,3 +951,16 @@ input[type="checkbox"] {
   font-size: 10px !important;
   line-height: 1.7;
 }
+.error {
+  background: #361e26;
+  border: 1px solid #7d3e47;
+  color: #f4b7b7;
+  padding: 15px 18px;
+  border-radius: 8px;
+  margin-bottom: 22px;
+  font-size: 13px;
+}
+.warning {
+  color: #dfb573;
+  font-size: 11px;
+}
