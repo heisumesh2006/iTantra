@@ -964,3 +964,16 @@ input[type="checkbox"] {
   color: #dfb573;
   font-size: 11px;
 }
+.note {
+  background: #131f32;
+  border-left: 2px solid #618fa3;
+  padding: 13px 15px;
+  border-radius: 4px;
+  margin: 17px 0;
+  color: #aabcce;
+  font-size: 12px;
+}
+.note p {
+  font-size: 11px;
+  margin: 6px 0;
+}
