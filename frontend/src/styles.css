@@ -977,3 +977,27 @@ input[type="checkbox"] {
   font-size: 11px;
   margin: 6px 0;
 }
+.busy {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 11px;
+}
+.busy svg {
+  animation: spin 1.4s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.recording {
+  animation: pulse 1.5s infinite;
+  color: #ef9a9a;
+  border-color: #855656;
+}
+@keyframes pulse {
+  50% {
+    box-shadow: 0 0 0 8px #c8656519;
+  }
+}
