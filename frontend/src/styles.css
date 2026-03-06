@@ -1039,3 +1039,36 @@ input[type="checkbox"] {
   margin: 10px 0 0;
   overflow-wrap: anywhere;
 }
+.metric-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  border: 1px solid #2b394f;
+  border-radius: 7px;
+  overflow: hidden;
+  margin: 22px 0;
+  background: #283449;
+}
+.metric {
+  padding: 14px 12px;
+  background: #101b2c;
+}
+.metric > span {
+  font-size: 8px;
+  color: #839ab4;
+  display: block;
+  margin-bottom: 9px;
+}
+.metric strong {
+  font-family:
+    Manrope,
+    Segoe UI,
+    sans-serif;
+  font-size: 16px;
+  color: #dce5f6;
+  font-weight: 500;
+}
+.metric small {
+  font-size: 8px;
+  color: #95a8bf;
+}
