@@ -1001,3 +1001,27 @@ input[type="checkbox"] {
     box-shadow: 0 0 0 8px #c8656519;
   }
 }
+.result-status {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 13px;
+  border-radius: 7px;
+  border: 1px solid #294a3f;
+  background: #10271f;
+  color: #80d4b0;
+}
+.result-status strong {
+  font-size: 11px;
+}
+.result-status p {
+  font-size: 9px;
+  margin: 4px 0 0;
+  word-break: break-word;
+  color: #9cb9ae;
+}
+.result-status.failure {
+  background: #301d27;
+  border-color: #6b3543;
+  color: #e59caa;
+}
