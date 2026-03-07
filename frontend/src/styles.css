@@ -1108,3 +1108,24 @@ input[type="checkbox"] {
   gap: 7px;
   color: var(--cyan);
 }
+.lab-grid {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: 22px;
+}
+.chart {
+  height: 290px;
+  margin: 18px 0 12px;
+}
+.chart.short {
+  height: 235px;
+}
+.chart-stack .panel {
+  padding: 22px;
+}
+.chart .recharts-text {
+  font-size: 9px;
+}
+.chart .recharts-legend-item-text {
+  font-size: 10px;
+}
