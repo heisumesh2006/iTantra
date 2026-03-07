@@ -1072,3 +1072,21 @@ input[type="checkbox"] {
   font-size: 8px;
   color: #95a8bf;
 }
+.packet-strip {
+  display: flex;
+  gap: 3px;
+  flex-wrap: wrap;
+}
+.packet-strip i {
+  display: block;
+  width: 8px;
+  height: 13px;
+  background: #b88c58;
+  border-radius: 2px;
+}
+.packet-strip .delivered {
+  background: #58bfa0;
+}
+.packet-strip .crc_failed {
+  background: #d47d86;
+}
