@@ -1090,3 +1090,21 @@ input[type="checkbox"] {
 .packet-strip .crc_failed {
   background: #d47d86;
 }
+.record-details {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 10px;
+  color: #95a9bf;
+}
+.record-details b {
+  color: #cfdbea;
+  margin-left: 5px;
+}
+.record-details a {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--cyan);
+}
