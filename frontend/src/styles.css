@@ -1191,3 +1191,18 @@ input[type="checkbox"] {
 .tabs button:hover:not(:disabled) {
   background: #142330;
 }
+.spectrogram {
+  margin: 20px 0;
+}
+.spectrogram canvas {
+  width: 100%;
+  height: 135px;
+  display: block;
+  border-radius: 7px;
+  border: 1px solid #2b3c57;
+}
+.spectrogram figcaption {
+  font-size: 9px;
+  color: #7e94b2;
+  margin-top: 7px;
+}
