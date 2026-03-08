@@ -1129,3 +1129,45 @@ input[type="checkbox"] {
 .chart .recharts-legend-item-text {
   font-size: 10px;
 }
+.language-cards {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+  margin: 25px 0;
+}
+.language-card {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+  padding: 18px 14px;
+  background: #111b2b;
+  border-color: #293850;
+  color: #b6c3da;
+  gap: 8px;
+  text-align: left;
+}
+.language-card:hover:not(:disabled) {
+  background: #1a2b39;
+}
+.language-card.selected {
+  border-color: #3e918b;
+  background: #123033;
+}
+.language-card strong {
+  font-family:
+    Nirmala UI,
+    Segoe UI,
+    sans-serif;
+  font-size: 19px;
+  color: #d6e5ee;
+  min-height: 28px;
+}
+.language-card span {
+  font-size: 10px;
+}
+.language-card small {
+  font-size: 8px;
+  color: #8da5b9;
+  line-height: 1.6;
+}
