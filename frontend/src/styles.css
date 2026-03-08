@@ -1171,3 +1171,23 @@ input[type="checkbox"] {
   color: #8da5b9;
   line-height: 1.6;
 }
+.tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 26px;
+}
+.tabs button {
+  background: none;
+  color: #879cb7;
+  border-radius: 0;
+  padding: 15px 22px;
+  border-bottom: 2px solid transparent;
+}
+.tabs button.selected {
+  color: var(--cyan);
+  border-bottom-color: var(--cyan);
+}
+.tabs button:hover:not(:disabled) {
+  background: #142330;
+}
