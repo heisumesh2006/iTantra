@@ -1206,3 +1206,22 @@ input[type="checkbox"] {
   color: #7e94b2;
   margin-top: 7px;
 }
+.timeline > div {
+  display: grid;
+  grid-template-columns: 125px minmax(0, 1fr) 80px;
+  align-items: center;
+  gap: 12px;
+  font-size: 10px;
+  margin: 17px 0;
+  color: #98aecb;
+}
+.timeline i {
+  height: 6px;
+  display: block;
+  background: linear-gradient(90deg, #4ebeb8, #8a7ac9);
+  border-radius: 4px;
+}
+.timeline strong {
+  font-weight: 400;
+  text-align: right;
+}
