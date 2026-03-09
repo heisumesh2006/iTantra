@@ -1225,3 +1225,15 @@ input[type="checkbox"] {
   font-weight: 400;
   text-align: right;
 }
+.experiment-form {
+  display: grid;
+  grid-template-columns: 100px 1.2fr 1fr 1.5fr auto;
+  gap: 16px;
+  align-items: end;
+}
+.experiment-form label {
+  margin: 0;
+}
+.experiment-form button {
+  height: 38px;
+}
