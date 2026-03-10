@@ -1286,3 +1286,18 @@ td small {
   padding: 6px;
   border: 1px solid #493748;
 }
+.filter {
+  max-width: 240px;
+}
+.experiment-list > div {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  padding: 16px 0;
+  font-size: 11px;
+  color: #95a8c5;
+}
+.experiment-list a {
+  color: var(--cyan);
+}
