@@ -1269,3 +1269,20 @@ td small {
   font-size: 8px;
   margin-top: 5px;
 }
+.status-chip {
+  background: #20273b;
+  color: #aeacc7;
+  border-radius: 4px;
+  padding: 5px 8px;
+  font-size: 9px;
+}
+.status-chip.success {
+  background: #173a2e;
+  color: #85d4b2;
+}
+.icon-button {
+  background: #232233;
+  color: #e7a5ac;
+  padding: 6px;
+  border: 1px solid #493748;
+}
