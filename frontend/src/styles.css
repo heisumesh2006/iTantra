@@ -1301,3 +1301,18 @@ td small {
 .experiment-list a {
   color: var(--cyan);
 }
+.conversation {
+  display: flex;
+  gap: 22px;
+  align-items: center;
+  padding: 14px;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+}
+.conversation span {
+  color: #8da3bf;
+}
+.conversation audio {
+  max-width: 280px;
+  margin-left: auto;
+}
