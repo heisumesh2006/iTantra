@@ -1353,3 +1353,21 @@ td small {
   font-size: 9px;
   letter-spacing: 1px;
 }
+.architecture-detail {
+  border: 1px solid #2c4059;
+  background: #0c182a;
+  padding: 22px;
+  border-radius: 8px;
+}
+.architecture-detail p {
+  margin-bottom: 0;
+}
+.formula {
+  font-family: Consolas, monospace;
+  font-size: 20px;
+  line-height: 1.8;
+  color: #8ce0d8;
+  background: #0b1524;
+  padding: 20px;
+  border-radius: 8px;
+}
