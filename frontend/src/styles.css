@@ -1371,3 +1371,15 @@ td small {
   padding: 20px;
   border-radius: 8px;
 }
+.reference-list a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 0;
+  border-bottom: 1px solid #26364d;
+  color: #aabed8;
+  font-size: 12px;
+}
+.reference-list a:hover {
+  color: var(--cyan);
+}
