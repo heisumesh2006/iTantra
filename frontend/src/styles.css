@@ -1316,3 +1316,17 @@ td small {
   max-width: 280px;
   margin-left: auto;
 }
+.architecture {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin: 25px 0;
+}
+.architecture > div {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.architecture > div > svg {
+  color: #586f91;
+}
