@@ -1330,3 +1330,26 @@ td small {
 .architecture > div > svg {
   color: #586f91;
 }
+.architecture-node {
+  background: #172337;
+  border-color: #314361;
+  color: #afc5df;
+  display: flex;
+  flex-direction: column;
+  width: 145px;
+  height: 145px;
+  padding: 20px;
+  gap: 13px;
+}
+.architecture-node.selected {
+  background: #163037;
+  border-color: #458e91;
+  color: var(--cyan);
+}
+.architecture-node strong {
+  font-size: 13px;
+}
+.architecture-node small {
+  font-size: 9px;
+  letter-spacing: 1px;
+}
