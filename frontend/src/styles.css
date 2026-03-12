@@ -1397,3 +1397,18 @@ footer span:last-child {
   font-size: 7px;
   letter-spacing: 1.4px;
 }
+.menu-toggle {
+  display: none;
+}
+.skip-link {
+  position: fixed;
+  top: -60px;
+  left: 270px;
+  background: var(--cyan);
+  padding: 10px;
+  color: #092e2b;
+  z-index: 100;
+}
+.skip-link:focus {
+  top: 8px;
+}
