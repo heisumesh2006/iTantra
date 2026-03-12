@@ -1412,3 +1412,13 @@ footer span:last-child {
 .skip-link:focus {
   top: 8px;
 }
+.three-col > div h3 {
+  font-size: 17px;
+  margin-top: 17px;
+}
+.three-col > div p {
+  font-size: 12px;
+}
+.sidebar-overlay {
+  display: none;
+}
