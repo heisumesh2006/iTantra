@@ -1501,3 +1501,56 @@ footer span:last-child {
     grid-template-columns: repeat(3, 1fr);
   }
 }
+@media (max-width: 1000px) {
+  .hero h1 {
+    font-size: 50px;
+  }
+  .hero > p {
+    max-width: 350px;
+  }
+  .orbital-visual {
+    opacity: 0.25;
+    right: -80px;
+  }
+  .topbar-status {
+    gap: 13px;
+  }
+  .simulation-label {
+    display: none;
+  }
+  .three-col {
+    grid-template-columns: 1fr;
+  }
+  .mode-card p {
+    min-height: 0;
+  }
+  .mode-card > svg {
+    float: right;
+    margin: 24px 0 0;
+  }
+  .two-col {
+    grid-template-columns: 1fr;
+  }
+  .flow-ribbon span {
+    font-size: 9px;
+    gap: 5px;
+  }
+  .flow-ribbon svg {
+    width: 14px;
+  }
+  .architecture {
+    flex-wrap: wrap;
+  }
+  .lab-grid {
+    grid-template-columns: 1fr;
+  }
+  .lab-grid > .panel .controls-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .lab-grid .two-col {
+    grid-template-columns: 1fr 1fr;
+  }
+  .hero h1 {
+    letter-spacing: -2px;
+  }
+}
