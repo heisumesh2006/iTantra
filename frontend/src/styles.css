@@ -1441,3 +1441,63 @@ footer span:last-child {
     max-width: 520px;
   }
 }
+@media (max-width: 1280px) {
+  .sidebar {
+    width: 220px;
+    padding: 28px 14px;
+  }
+  .main-shell {
+    margin-left: 220px;
+  }
+  main {
+    padding: 28px 25px 0;
+  }
+  .topbar {
+    padding: 0 25px;
+  }
+  .orbital-visual {
+    right: -60px;
+    opacity: 0.65;
+    transform: scale(0.85);
+    transform-origin: right center;
+  }
+  .hero > p {
+    max-width: 400px;
+  }
+  .studio-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .studio-grid > section:last-child {
+    grid-column: span 2;
+  }
+  .studio-grid .empty {
+    min-height: 180px;
+  }
+  .experiment-form {
+    grid-template-columns: 1fr 1fr;
+  }
+  .flow-ribbon {
+    gap: 10px;
+    padding: 20px 16px;
+  }
+  .flow-ribbon small {
+    display: none;
+  }
+  .architecture-node {
+    width: 120px;
+    height: 130px;
+  }
+  .architecture,
+  .architecture > div {
+    gap: 10px;
+  }
+  .lab-grid {
+    grid-template-columns: 270px minmax(0, 1fr);
+  }
+  .lab-grid .two-col {
+    grid-template-columns: 1fr;
+  }
+  .language-cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
