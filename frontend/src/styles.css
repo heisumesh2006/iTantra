@@ -1422,3 +1422,22 @@ footer span:last-child {
 .sidebar-overlay {
   display: none;
 }
+@media (min-width: 1600px) {
+  main {
+    padding: 45px 50px 0;
+  }
+  .hero {
+    min-height: 490px;
+  }
+  .hero h1 {
+    font-size: 72px;
+  }
+  .orbital-visual {
+    right: 65px;
+    transform: scale(1.12);
+    top: 30px;
+  }
+  .hero > p {
+    max-width: 520px;
+  }
+}
