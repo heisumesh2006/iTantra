@@ -1744,3 +1744,10 @@ footer span:last-child {
     scroll-behavior: auto !important;
   }
 }
+
+.connection.pending {
+  color: #bda580;
+}
+.connection.pending i {
+  background: #bda580;
+}
