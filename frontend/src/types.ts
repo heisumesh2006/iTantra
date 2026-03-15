@@ -10,3 +10,15 @@ export type Channel = {
   seed: number;
   symbol_rate: number;
 };
+export type Language = {
+  code: string;
+  name: string;
+  native: string;
+  status: string;
+  stt_installed: boolean;
+  tts_installed: boolean;
+  stt_verified: boolean;
+  tts_verified: boolean;
+  tts_model: string;
+  stt_model: string;
+};
