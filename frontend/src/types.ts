@@ -1,0 +1,1 @@
+export type Mode = "conventional" | "neural" | "semantic" | "adaptive";
