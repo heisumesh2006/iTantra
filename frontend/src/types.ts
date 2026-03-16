@@ -22,3 +22,15 @@ export type Language = {
   tts_model: string;
   stt_model: string;
 };
+export type Capabilities = {
+  simulation_mode: boolean;
+  languages: Language[];
+  neural: {
+    installed: boolean;
+    verified: boolean;
+    model: string;
+    bandwidths: number[];
+  };
+  stt: { provider: string; model: string };
+  privacy: string;
+};
