@@ -46,3 +46,4 @@ export type Media = {
   clipped_fraction: number;
   spectrogram: { values: number[][]; frequencies: number[]; times: number[] };
 };
+export type Metrics = Record<string, number | boolean | null>;
