@@ -34,3 +34,15 @@ export type Capabilities = {
   stt: { provider: string; model: string };
   privacy: string;
 };
+export type Media = {
+  id: string;
+  url: string;
+  duration_seconds: number;
+  sample_rate: number;
+  samples: number;
+  channels: number;
+  waveform: number[];
+  silent: boolean;
+  clipped_fraction: number;
+  spectrogram: { values: number[][]; frequencies: number[]; times: number[] };
+};
