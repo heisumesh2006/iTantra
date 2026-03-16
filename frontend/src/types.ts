@@ -47,3 +47,15 @@ export type Media = {
   spectrogram: { values: number[][]; frequencies: number[]; times: number[] };
 };
 export type Metrics = Record<string, number | boolean | null>;
+export type TransmissionConfig = {
+  media_id?: string;
+  mode: Mode;
+  language: string;
+  text?: string;
+  reference?: string;
+  bandwidth_kbps: number;
+  budget_kbps: number;
+  objective: "meaning" | "waveform";
+  target_latency_ms: number;
+  channel_config: Channel;
+};
