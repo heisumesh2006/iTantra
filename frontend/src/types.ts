@@ -85,3 +85,12 @@ export type Result = {
   stt: { model: string; processing_ms: number } | null;
   tts: { model: string; processing_ms: number } | null;
 };
+export type Job = {
+  id: string;
+  created_at: string;
+  status: "queued" | "running" | "completed" | "failed" | "cancelled";
+  config: TransmissionConfig;
+  result: Result | null;
+  error: string | null;
+  stages: { name: string; timestamp: string; detail: unknown }[];
+};
