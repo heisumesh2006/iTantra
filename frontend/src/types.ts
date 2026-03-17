@@ -59,3 +59,29 @@ export type TransmissionConfig = {
   target_latency_ms: number;
   channel_config: Channel;
 };
+export type Result = {
+  mode: Mode;
+  provider: string;
+  source: Media | null;
+  receiver: Media | null;
+  sender_text: string | null;
+  recovered_text: string | null;
+  semantic_input: string | null;
+  recovery_status: string;
+  reconstruction_error?: string | null;
+  reconstruction_status?: string;
+  failure: string | null;
+  metrics: Metrics;
+  timing: Record<string, number>;
+  config: TransmissionConfig;
+  packets: { sequence: number; status: string; bit_errors: number | null }[];
+  constellation: {
+    i: number;
+    q: number;
+    equalized_i: number;
+    equalized_q: number;
+  }[];
+  decision: { mode: Mode; reason: string; tradeoffs: string[] } | null;
+  stt: { model: string; processing_ms: number } | null;
+  tts: { model: string; processing_ms: number } | null;
+};
