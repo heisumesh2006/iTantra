@@ -94,3 +94,14 @@ export type Job = {
   error: string | null;
   stages: { name: string; timestamp: string; detail: unknown }[];
 };
+export type Sweep = {
+  points: {
+    snr_db: number;
+    ber: number | null;
+    packet_error_rate: number;
+    recovery_rate: number;
+    theoretical_ber: number | null;
+  }[];
+  constellation: Result["constellation"];
+  snr_definition: string;
+};
