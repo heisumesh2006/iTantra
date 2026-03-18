@@ -44,3 +44,6 @@ export async function api<T>(
     clearTimeout(timeout);
   }
 }
+export function message(error: unknown) {
+  return error instanceof Error ? error.message : "Unexpected processing error";
+}
