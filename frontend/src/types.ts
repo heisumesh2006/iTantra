@@ -105,3 +105,13 @@ export type Sweep = {
   constellation: Result["constellation"];
   snr_definition: string;
 };
+export type Experiment = {
+  id: string;
+  created_at: string;
+  status: Job["status"];
+  error: string | null;
+  stages: Job["stages"];
+  result: {
+    runs: (Result & { error?: string; status?: string; snr_db?: number })[];
+  } | null;
+};
