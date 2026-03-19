@@ -47,3 +47,14 @@ export async function api<T>(
 export function message(error: unknown) {
   return error instanceof Error ? error.message : "Unexpected processing error";
 }
+export const baseline = {
+  modulation: "BPSK",
+  channel: "awgn",
+  snr_db: 12,
+  packet_size: 256,
+  repetition: 1,
+  erasure_rate: 0,
+  bit_flip_rate: 0,
+  seed: 42,
+  symbol_rate: 12000,
+} as const;
