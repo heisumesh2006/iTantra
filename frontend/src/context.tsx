@@ -1,5 +1,4 @@
-
-import { createContext, useState, type ReactNode } from "react";
+import { createContext, useContext, useState, type ReactNode } from "react";
 import type { Media } from "./types";
 const Context = createContext<{
   media: Media | null;
@@ -11,3 +10,4 @@ export function AudioContext({ children }: { children: ReactNode }) {
     <Context.Provider value={{ media, setMedia }}>{children}</Context.Provider>
   );
 }
+export const useAudio = () => useContext(Context);
