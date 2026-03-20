@@ -53,3 +53,10 @@ export function PageTitle({
     </header>
   );
 }
+export function ErrorBox({ error }: { error: string | null }) {
+  return error ? (
+    <div className="error" role="alert">
+      {error}
+    </div>
+  ) : null;
+}
