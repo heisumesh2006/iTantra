@@ -28,3 +28,28 @@ export function Panel({
     </section>
   );
 }
+export function PageTitle({
+  tag,
+  title,
+  description,
+  action,
+}: {
+  tag: string;
+  title: string;
+  description: string;
+  action?: ReactNode;
+}) {
+  return (
+    <header className="page-title">
+      <div>
+        <span className="eyebrow">{tag}</span>
+        <h1>
+          {title}
+          <span className="title-dot">.</span>
+        </h1>
+        <p>{description}</p>
+      </div>
+      {action}
+    </header>
+  );
+}
