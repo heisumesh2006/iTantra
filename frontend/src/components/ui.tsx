@@ -77,3 +77,8 @@ export function Busy({ label = "Processing" }: { label?: string }) {
     </span>
   );
 }
+export function format(value: unknown, digits = 2) {
+  return typeof value === "number" && Number.isFinite(value)
+    ? value.toLocaleString(undefined, { maximumFractionDigits: digits })
+    : "Not measured";
+}
