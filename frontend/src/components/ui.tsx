@@ -1,6 +1,6 @@
 
 import type { ReactNode } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, LoaderCircle } from "lucide-react";
 export function Panel({
   children,
   title,
@@ -67,5 +67,13 @@ export function Empty({ children }: { children: ReactNode }) {
       <ArrowUpRight size={22} />
       <p>{children}</p>
     </div>
+  );
+}
+export function Busy({ label = "Processing" }: { label?: string }) {
+  return (
+    <span className="busy">
+      <LoaderCircle size={16} />
+      {label}
+    </span>
   );
 }
