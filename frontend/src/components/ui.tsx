@@ -1,5 +1,6 @@
 
 import type { ReactNode } from "react";
+import { ArrowUpRight } from "lucide-react";
 export function Panel({
   children,
   title,
@@ -59,4 +60,12 @@ export function ErrorBox({ error }: { error: string | null }) {
       {error}
     </div>
   ) : null;
+}
+export function Empty({ children }: { children: ReactNode }) {
+  return (
+    <div className="empty">
+      <ArrowUpRight size={22} />
+      <p>{children}</p>
+    </div>
+  );
 }
