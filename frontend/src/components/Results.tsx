@@ -1,6 +1,7 @@
 
 import { Download, CheckCircle2, AlertTriangle } from "lucide-react";
 import type { Result } from "../types";
+import { MetricGrid } from "./ui";
 import { Waveform, Spectrogram } from "./AudioInput";
 export function Results({
   result,
@@ -48,6 +49,6 @@ export function Results({
           </a>
           {!compact && <Spectrogram media={result.receiver} />}
         </>
-      )}</div>
+      )}<MetricGrid metrics={result.metrics} /></div>
   );
 }
