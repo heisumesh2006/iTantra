@@ -49,6 +49,17 @@ export function Results({
           </a>
           {!compact && <Spectrogram media={result.receiver} />}
         </>
-      )}<MetricGrid metrics={result.metrics} /></div>
+      )}<MetricGrid metrics={result.metrics} /><div className="packet-strip" aria-label="Packet delivery results">
+        {result.packets.slice(0, 180).map((p) => (
+          <i
+            key={p.sequence}
+            className={p.status}
+            title={`Packet ${p.sequence}: ${p.status}; bit errors ${p.bit_errors ?? "not comparable"}`}
+          />
+        ))}
+      </div><p className="muted small">
+        {result.packets.length} packets · green: CRC valid · red: corrupt ·
+        amber: erased
+      </p></div>
   );
 }
