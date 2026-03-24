@@ -64,6 +64,14 @@ export function Results({
         <p className="warning">
           Measured wire bits per speech second exceed the configured budget.
         </p>
+      )}{result.decision && (
+        <div className="note">
+          <strong>Adaptive selected {result.decision.mode}</strong>
+          <p>{result.decision.reason}</p>
+          {result.decision.tradeoffs.map((t) => (
+            <p key={t}>{t}</p>
+          ))}
+        </div>
       )}</div>
   );
 }
