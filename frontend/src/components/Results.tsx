@@ -60,6 +60,10 @@ export function Results({
       </div><p className="muted small">
         {result.packets.length} packets · green: CRC valid · red: corrupt ·
         amber: erased
-      </p></div>
+      </p>{result.metrics.budget_exceeded && (
+        <p className="warning">
+          Measured wire bits per speech second exceed the configured budget.
+        </p>
+      )}</div>
   );
 }
