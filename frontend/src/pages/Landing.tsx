@@ -48,6 +48,32 @@ export default function Landing() {
           <span className="orbit-label l2">RECOVER / SYNTHESIZE</span>
           <span className="orbit-label l3">SIMULATED RADIO LINK</span>
         </div>
-      </section></>
+      </section><div className="flow-ribbon">
+        <span>
+          <AudioLines size={20} />
+          Voice
+        </span>
+        <ArrowRight size={17} />
+        <span>
+          <Cpu size={20} />
+          Encode
+        </span>
+        <ArrowRight size={17} />
+        <span className="cyan">
+          <Radio size={20} />
+          Simulate radio
+        </span>
+        <ArrowRight size={17} />
+        <span>
+          <Cpu size={20} />
+          Recover
+        </span>
+        <ArrowRight size={17} />
+        <span>
+          <AudioLines size={20} />
+          Reconstruct
+        </span>
+        <small>CONCEPTUAL PIPELINE</small>
+      </div></>
   );
 }
