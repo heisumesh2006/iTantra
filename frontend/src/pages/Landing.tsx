@@ -74,6 +74,14 @@ export default function Landing() {
           Reconstruct
         </span>
         <small>CONCEPTUAL PIPELINE</small>
+      </div><div className="section-heading">
+        <div>
+          <span className="eyebrow">THREE PATHS / ONE SOURCE</span>
+          <h2>Choose what your link carries.</h2>
+        </div>
+        <Link className="text-link" to="/research">
+          View architecture <ArrowUpRight size={16} />
+        </Link>
       </div></>
   );
 }
