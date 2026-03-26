@@ -1,6 +1,6 @@
 
 import { Link } from "react-router-dom";
-import { ArrowUpRight, ArrowRight, AudioLines, Radio, Cpu, ShieldCheck } from "lucide-react";
+import { ArrowUpRight, ArrowRight, AudioLines, Radio, Cpu, Languages, ShieldCheck } from "lucide-react";
 export default function Landing() {
   return (
     <><section className="hero">
@@ -82,6 +82,46 @@ export default function Landing() {
         <Link className="text-link" to="/research">
           View architecture <ArrowUpRight size={16} />
         </Link>
+      </div><div className="three-col mode-cards">
+        {[
+          {
+            tag: "MODE A",
+            title: "The waveform",
+            icon: AudioLines,
+            text: "A conventional Opus baseline. Preserve the acoustic signal and measure its actual transport cost.",
+            link: "/compression",
+            color: "cyan",
+          },
+          {
+            tag: "MODE B",
+            title: "The neural code",
+            icon: Cpu,
+            text: "Pretrained EnCodec turns audio into quantized indices. Serialize, transmit and decode the real tokens.",
+            link: "/compression",
+            color: "violet-text",
+          },
+          {
+            tag: "MODE C",
+            title: "The meaning",
+            icon: Languages,
+            text: "Recognize speech, transmit compact Unicode text, then synthesize speech from recovered information.",
+            link: "/speech",
+            color: "cyan",
+          },
+        ].map((m) => (
+          <Link className="panel mode-card" to={m.link} key={m.tag}>
+            <div className="split-label">
+              <span className="eyebrow">{m.tag}</span>
+              <ArrowUpRight size={18} />
+            </div>
+            <m.icon size={33} className={m.color} />
+            <h3>{m.title}</h3>
+            <p>{m.text}</p>
+            <span className="text-link">
+              Explore pathway <ArrowRight size={14} />
+            </span>
+          </Link>
+        ))}
       </div></>
   );
 }
