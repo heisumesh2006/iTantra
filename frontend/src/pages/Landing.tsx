@@ -1,6 +1,7 @@
 
 import { Link } from "react-router-dom";
 import { ArrowUpRight, ArrowRight, AudioLines, Radio, Cpu, Languages, ShieldCheck } from "lucide-react";
+import { Panel } from "../components/ui";
 export default function Landing() {
   return (
     <><section className="hero">
@@ -122,6 +123,22 @@ export default function Landing() {
             </span>
           </Link>
         ))}
-      </div></>
+      </div><div className="two-col"><Panel
+          title="Built for Indian scripts"
+          eyebrow="SIX CONFIGURABLE LANGUAGES"
+        >
+          <div className="script-display">
+            हिन्दी <span>ಕನ್ನಡ</span> தமிழ்
+            <br />
+            తెలుగు മലയാളം <span>English</span>
+          </div>
+          <p>
+            Unicode-safe packets and language-specific synthesis. The Speech Lab
+            reports actual installed and verified model capabilities.
+          </p>
+          <Link className="text-link" to="/speech">
+            Inspect language coverage <ArrowUpRight size={15} />
+          </Link>
+        </Panel></div></>
   );
 }
