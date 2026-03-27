@@ -1,10 +1,19 @@
-
 import { Link } from "react-router-dom";
-import { ArrowUpRight, ArrowRight, AudioLines, Radio, Cpu, Languages, ShieldCheck } from "lucide-react";
+import {
+  ArrowUpRight,
+  ArrowRight,
+  AudioLines,
+  Radio,
+  Cpu,
+  Languages,
+  Activity,
+  ShieldCheck,
+} from "lucide-react";
 import { Panel } from "../components/ui";
 export default function Landing() {
   return (
-    <><section className="hero">
+    <>
+      <section className="hero">
         <span className="hero-tag">
           <i />
           INDIAN MULTILINGUAL COMMUNICATION RESEARCH
@@ -49,7 +58,8 @@ export default function Landing() {
           <span className="orbit-label l2">RECOVER / SYNTHESIZE</span>
           <span className="orbit-label l3">SIMULATED RADIO LINK</span>
         </div>
-      </section><div className="flow-ribbon">
+      </section>
+      <div className="flow-ribbon">
         <span>
           <AudioLines size={20} />
           Voice
@@ -75,7 +85,8 @@ export default function Landing() {
           Reconstruct
         </span>
         <small>CONCEPTUAL PIPELINE</small>
-      </div><div className="section-heading">
+      </div>
+      <div className="section-heading">
         <div>
           <span className="eyebrow">THREE PATHS / ONE SOURCE</span>
           <h2>Choose what your link carries.</h2>
@@ -83,7 +94,8 @@ export default function Landing() {
         <Link className="text-link" to="/research">
           View architecture <ArrowUpRight size={16} />
         </Link>
-      </div><div className="three-col mode-cards">
+      </div>
+      <div className="three-col mode-cards">
         {[
           {
             tag: "MODE A",
@@ -123,7 +135,9 @@ export default function Landing() {
             </span>
           </Link>
         ))}
-      </div><div className="two-col"><Panel
+      </div>
+      <div className="two-col">
+        <Panel
           title="Built for Indian scripts"
           eyebrow="SIX CONFIGURABLE LANGUAGES"
         >
@@ -139,6 +153,24 @@ export default function Landing() {
           <Link className="text-link" to="/speech">
             Inspect language coverage <ArrowUpRight size={15} />
           </Link>
-        </Panel></div></>
+        </Panel>
+        <Panel title="Evidence at every stage" eyebrow="REPRODUCIBLE BY DESIGN">
+          <Activity className="cyan" size={30} />
+          <p>
+            Inspect measured BER, CRC-valid packets, complete wire size and CPU
+            processing time. Explore noise, fading and packet loss with
+            deterministic seeds.
+          </p>
+          <div className="button-row">
+            <Link className="text-link" to="/channel">
+              Open Channel Lab <ArrowUpRight size={15} />
+            </Link>
+            <Link className="text-link" to="/history">
+              Saved experiments <ArrowUpRight size={15} />
+            </Link>
+          </div>
+        </Panel>
+      </div>
+    </>
   );
 }
