@@ -56,6 +56,23 @@ export default function Research() {
           <span className="eyebrow">{stages[selected].name}</span>
           <p>{stages[selected].text}</p>
         </div>
-      </Panel></>
+      </Panel><div className="two-col"><Panel title="The research question" eyebrow="MEANING VS. WAVEFORM">
+          <p>
+            How do conventional waveform coding, neural audio coding and STT/TTS
+            semantic transmission compare under constrained and degraded links
+            for Indian languages?
+          </p>
+          <p>
+            Semantic transmission can reduce message size, but recognizer errors
+            affect meaning and synthesized speech changes voice, prosody and
+            identity. Low bitrate alone does not establish communication
+            quality.
+          </p>
+          <p>
+            Compare the same source recording under the same packet policy,
+            channel configuration and seed. Use human reference transcripts for
+            WER / CER and broader datasets before making language comparisons.
+          </p>
+        </Panel></div></>
   );
 }
