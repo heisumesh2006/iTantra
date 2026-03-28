@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Mic, Cpu, Radio, Volume2, ArrowRight } from "lucide-react";
+import { Mic, Cpu, Radio, Volume2, FileText, ArrowRight } from "lucide-react";
 import { PageTitle, Panel } from "../components/ui";
 const stages = [
   {
@@ -90,6 +90,35 @@ export default function Research() {
             BPSK reference: Q(√(2Es/N₀)). QPSK: Q(√(Es/N₀)) per bit. CRC detects
             corruption and does not correct errors.
           </p>
-        </Panel></div></>
+        </Panel></div><Panel title="Boundaries of this prototype" eyebrow="SCIENTIFIC HONESTY">
+        <div className="three-col">
+          <div>
+            <FileText className="cyan" />
+            <h3>Simulation, not physical RF</h3>
+            <p>
+              No SDR, carrier synchronization, multipath, hardware scheduling or
+              RF calibration. Packet boundaries are provided by the simulator.
+            </p>
+          </div>
+          <div>
+            <Cpu className="violet-text" />
+            <h3>Pretrained ≠ newly trained</h3>
+            <p>
+              Whisper, MMS and EnCodec are pretrained providers. The separate
+              PyTorch latent-channel experiment is a small research extension,
+              with its own train / validation / test split.
+            </p>
+          </div>
+          <div>
+            <Volume2 className="cyan" />
+            <h3>Metrics have domains</h3>
+            <p>
+              SI-SDR evaluates waveform similarity and is omitted for semantic
+              TTS. WER uses NFC normalization and whitespace tokenization. No
+              fabricated confidence, STOI, PESQ or human listening score.
+            </p>
+          </div>
+        </div>
+      </Panel></>
   );
 }
