@@ -1,6 +1,13 @@
-
 import { useState } from "react";
-import { Mic, Cpu, Radio, Volume2, FileText, ArrowRight } from "lucide-react";
+import {
+  Mic,
+  Cpu,
+  Radio,
+  Volume2,
+  FileText,
+  ArrowRight,
+  ExternalLink,
+} from "lucide-react";
 import { PageTitle, Panel } from "../components/ui";
 const stages = [
   {
@@ -27,11 +34,13 @@ const stages = [
 export default function Research() {
   const [selected, setSelected] = useState(2);
   return (
-    <><PageTitle
+    <>
+      <PageTitle
         tag="FOUNDATIONS / RESEARCH PROTOTYPE"
         title="Research & Architecture"
         description="Understand the assumptions, model boundaries and evidence behind each transmission."
-      /><Panel
+      />
+      <Panel
         title="Inside the transceiver"
         eyebrow="INTERACTIVE SYSTEM DIAGRAM"
       >
@@ -56,7 +65,9 @@ export default function Research() {
           <span className="eyebrow">{stages[selected].name}</span>
           <p>{stages[selected].text}</p>
         </div>
-      </Panel><div className="two-col"><Panel title="The research question" eyebrow="MEANING VS. WAVEFORM">
+      </Panel>
+      <div className="two-col">
+        <Panel title="The research question" eyebrow="MEANING VS. WAVEFORM">
           <p>
             How do conventional waveform coding, neural audio coding and STT/TTS
             semantic transmission compare under constrained and degraded links
@@ -73,7 +84,8 @@ export default function Research() {
             channel configuration and seed. Use human reference transcripts for
             WER / CER and broader datasets before making language comparisons.
           </p>
-        </Panel><Panel
+        </Panel>
+        <Panel
           title="Mathematical assumptions"
           eyebrow="EXPLICIT / REPRODUCIBLE"
         >
@@ -90,7 +102,9 @@ export default function Research() {
             BPSK reference: Q(√(2Es/N₀)). QPSK: Q(√(Es/N₀)) per bit. CRC detects
             corruption and does not correct errors.
           </p>
-        </Panel></div><Panel title="Boundaries of this prototype" eyebrow="SCIENTIFIC HONESTY">
+        </Panel>
+      </div>
+      <Panel title="Boundaries of this prototype" eyebrow="SCIENTIFIC HONESTY">
         <div className="three-col">
           <div>
             <FileText className="cyan" />
@@ -119,6 +133,39 @@ export default function Research() {
             </p>
           </div>
         </div>
-      </Panel></>
+      </Panel>
+      <Panel title="Primary references" eyebrow="MODELS / IMPLEMENTATIONS">
+        <div className="reference-list">
+          {[
+            [
+              "Faster Whisper · CTranslate2 CPU inference",
+              "https://github.com/SYSTRAN/faster-whisper",
+            ],
+            [
+              "Meta MMS · multilingual speech synthesis",
+              "https://huggingface.co/facebook/mms-tts-kan",
+            ],
+            [
+              "Meta EnCodec · neural audio compression",
+              "https://github.com/facebookresearch/encodec",
+            ],
+            [
+              "AI4Bharat IndicConformer · future provider evaluation",
+              "https://huggingface.co/ai4bharat/indicconformer-600m-multilingual",
+            ],
+            ["OpenSLR · licensed speech corpora", "https://www.openslr.org/"],
+            [
+              "FLEURS · multilingual evaluation dataset",
+              "https://huggingface.co/datasets/google/fleurs",
+            ],
+          ].map(([name, url]) => (
+            <a key={url} href={url} target="_blank" rel="noreferrer">
+              {name}
+              <ExternalLink size={15} />
+            </a>
+          ))}
+        </div>
+      </Panel>
+    </>
   );
 }
