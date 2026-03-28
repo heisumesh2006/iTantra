@@ -73,6 +73,23 @@ export default function Research() {
             channel configuration and seed. Use human reference transcripts for
             WER / CER and broader datasets before making language comparisons.
           </p>
+        </Panel><Panel
+          title="Mathematical assumptions"
+          eyebrow="EXPLICIT / REPRODUCIBLE"
+        >
+          <div className="formula">
+            y = hx + n <br /> E[|x|²] = 1 · E[|n|²] = N₀
+            <br /> Es/N₀ = 10^(dB / 10)
+          </div>
+          <p>
+            AWGN: h = 1. Rayleigh: h ~ CN(0,1) independently per symbol; the
+            receiver knows h exactly. Repetition changes transmitted bits; the
+            noise is defined per symbol.
+          </p>
+          <p>
+            BPSK reference: Q(√(2Es/N₀)). QPSK: Q(√(Es/N₀)) per bit. CRC detects
+            corruption and does not correct errors.
+          </p>
         </Panel></div></>
   );
 }
