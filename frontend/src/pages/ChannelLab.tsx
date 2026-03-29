@@ -147,6 +147,34 @@ export default function ChannelLab() {
                 Run a sweep to generate measured points. No preloaded results.
               </Empty>
             )}
-          </Panel></div></div></>
+          </Panel><div className="two-col"><Panel title="Packet recovery" eyebrow="CRC VALIDATION">
+              {result ? (
+                <div className="chart short">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={result.points}>
+                      <CartesianGrid stroke="#253044" />
+                      <XAxis dataKey="snr_db" stroke="#8793a8" />
+                      <YAxis domain={[0, 1]} stroke="#8793a8" />
+                      <Tooltip contentStyle={{ background: "#111b2a" }} />
+                      <Legend />
+                      <Line
+                        name="Packet error rate"
+                        dataKey="packet_error_rate"
+                        stroke="#f49c78"
+                        dot={false}
+                      />
+                      <Line
+                        name="Full recovery rate"
+                        dataKey="recovery_rate"
+                        stroke="#59dfd6"
+                        dot={false}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              ) : (
+                <Empty>Measured packet outcomes will appear here.</Empty>
+              )}
+            </Panel></div></div></div></>
   );
 }
