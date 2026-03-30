@@ -1,6 +1,16 @@
-
 import { useState } from "react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+  ScatterChart,
+  Scatter,
+} from "recharts";
 import { FlaskConical, RotateCcw, Download } from "lucide-react";
 import { api, baseline, message } from "../api";
 import type { Channel, Sweep } from "../types";
@@ -45,12 +55,16 @@ export default function ChannelLab() {
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
   return (
-    <><PageTitle
+    <>
+      <PageTitle
         tag="RESEARCH / DIGITAL RADIO"
         title="Channel Simulation Lab"
         description="Explore symbol decisions, bit errors and packet integrity with reproducible numerical experiments."
         action={<span className="badge">Es/N0 · not Eb/N0</span>}
-      /><ErrorBox error={error} /><div className="lab-grid"><Panel title="Experiment configuration" eyebrow="CONTROLLED CONDITIONS">
+      />
+      <ErrorBox error={error} />
+      <div className="lab-grid">
+        <Panel title="Experiment configuration" eyebrow="CONTROLLED CONDITIONS">
           <ChannelControls value={config} onChange={setConfig} />
           <label>
             Trials at each Es/N0
@@ -84,7 +98,9 @@ export default function ChannelLab() {
             <RotateCcw size={14} />
             Reset baseline
           </button>
-        </Panel><div className="chart-stack"><Panel
+        </Panel>
+        <div className="chart-stack">
+          <Panel
             title="Bit error rate"
             eyebrow="EMPIRICAL VS. ANALYTICAL"
             action={
@@ -147,7 +163,9 @@ export default function ChannelLab() {
                 Run a sweep to generate measured points. No preloaded results.
               </Empty>
             )}
-          </Panel><div className="two-col"><Panel title="Packet recovery" eyebrow="CRC VALIDATION">
+          </Panel>
+          <div className="two-col">
+            <Panel title="Packet recovery" eyebrow="CRC VALIDATION">
               {result ? (
                 <div className="chart short">
                   <ResponsiveContainer width="100%" height="100%">
@@ -175,6 +193,40 @@ export default function ChannelLab() {
               ) : (
                 <Empty>Measured packet outcomes will appear here.</Empty>
               )}
-            </Panel></div></div></div></>
+            </Panel>
+            <Panel
+              title="Received constellation"
+              eyebrow="FINAL SNR / FINAL TRIAL"
+            >
+              {result ? (
+                <div className="chart short">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <ScatterChart>
+                      <CartesianGrid stroke="#253044" />
+                      <XAxis
+                        type="number"
+                        dataKey="i"
+                        name="In-phase"
+                        stroke="#8793a8"
+                      />
+                      <YAxis
+                        type="number"
+                        dataKey="q"
+                        name="Quadrature"
+                        stroke="#8793a8"
+                      />
+                      <Tooltip contentStyle={{ background: "#111b2a" }} />
+                      <Scatter data={result.constellation} fill="#9c87ff" />
+                    </ScatterChart>
+                  </ResponsiveContainer>
+                </div>
+              ) : (
+                <Empty>Actual received complex symbols, up to 256.</Empty>
+              )}
+            </Panel>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
