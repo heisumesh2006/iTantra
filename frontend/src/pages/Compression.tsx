@@ -1,10 +1,10 @@
-
 import { useEffect, useState } from "react";
 import { api, baseline, message } from "../api";
 import { useAudio } from "../context";
 import type { Experiment, Capabilities } from "../types";
-import { PageTitle, Panel, Busy, ErrorBox } from "../components/ui";
+import { PageTitle, Panel, Busy, ErrorBox, Empty } from "../components/ui";
 import { AudioInput, Spectrogram } from "../components/AudioInput";
+import { Results } from "../components/Results";
 export default function Compression() {
   const { media } = useAudio();
   const [job, setJob] = useState<Experiment | null>(null);
@@ -54,14 +54,19 @@ export default function Compression() {
   }
   const active = busy || job?.status === "running" || job?.status === "queued";
   return (
-    <><PageTitle
+    <>
+      <PageTitle
         tag="CODECS / SAME SOURCE COMPARISON"
         title="Compression Comparison"
         description="Compare actual Opus and EnCodec bitstreams through an ideal channel using the same recording."
-      /><ErrorBox error={error || job?.error || null} /><div className="two-col"><Panel title="Shared source" eyebrow="CONTROLLED AUDIO">
+      />
+      <ErrorBox error={error || job?.error || null} />
+      <div className="two-col">
+        <Panel title="Shared source" eyebrow="CONTROLLED AUDIO">
           <AudioInput />
           {media && <Spectrogram media={media} />}
-        </Panel><Panel title="Comparison protocol" eyebrow="HONEST RATE ACCOUNTING">
+        </Panel>
+        <Panel title="Comparison protocol" eyebrow="HONEST RATE ACCOUNTING">
           <p>
             Opus: 12 kbps target, mono, 20 ms frames. Neural: EnCodec 24 kHz at
             3 kbps, with real 10-bit codebook indices.
@@ -90,6 +95,29 @@ export default function Compression() {
               Export CSV
             </a>
           )}
-        </Panel></div></>
+        </Panel>
+      </div>
+      <div className="two-col">
+        {job?.result?.runs.map((r, i) => (
+          <Panel
+            key={i}
+            title={
+              r.mode === "conventional" ? "A / Conventional" : "B / Neural"
+            }
+            eyebrow="ENCODE → CHANNEL → DECODE"
+          >
+            {r.metrics ? (
+              <Results result={r} />
+            ) : (
+              <div className="warning">{r.error || r.status}</div>
+            )}
+          </Panel>
+        )) || (
+          <Panel title="Waiting for measurements">
+            <Empty>Record or upload one sample, then run both codecs.</Empty>
+          </Panel>
+        )}
+      </div>
+    </>
   );
 }
