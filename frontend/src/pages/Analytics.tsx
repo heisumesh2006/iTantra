@@ -210,6 +210,29 @@ export default function Analytics() {
               No measurements yet. Run a transmission or experiment.
             </Empty>
           )}
+        </Panel><Panel title="Computation time" eyebrow="WALL CLOCK / NOT RF LATENCY">
+          {chart.length ? (
+            <div className="chart">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={chart}>
+                  <CartesianGrid stroke="#253044" />
+                  <XAxis dataKey="mode" stroke="#8793a8" />
+                  <YAxis stroke="#8793a8" />
+                  <Tooltip contentStyle={{ background: "#111b2a" }} />
+                  <Bar
+                    dataKey="latency_ms"
+                    name="Compute milliseconds"
+                    fill="#9c87ff"
+                    radius={[4, 4, 0, 0]}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          ) : (
+            <Empty>
+              CPU inference and radio processing time will be measured.
+            </Empty>
+          )}
         </Panel></div></>
   );
 }
