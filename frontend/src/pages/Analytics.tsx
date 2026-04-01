@@ -1,9 +1,10 @@
 
 import { useEffect, useState } from "react";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend } from "recharts";
 import { api, baseline, message } from "../api";
 import { useAudio } from "../context";
 import type { Experiment, Metrics } from "../types";
-import { PageTitle, Panel, Busy, ErrorBox } from "../components/ui";
+import { PageTitle, Panel, Busy, ErrorBox, Empty } from "../components/ui";
 export default function Analytics() {
   const { media } = useAudio();
   const [runs, setRuns] = useState<
@@ -67,6 +68,21 @@ export default function Analytics() {
       setBusy(false);
     }
   }
+  const chart =
+    job?.result?.runs
+      .filter((r) => r.metrics)
+      .map((r) => ({
+        mode: `${r.mode} @ ${r.config.channel_config.snr_db}dB`,
+        payload_bps: r.metrics.source_bitrate_bps,
+        wire_bps: r.metrics.effective_link_bitrate_bps,
+        latency_ms: r.metrics.total_ms,
+      })) ||
+    runs.map((r) => ({
+      mode: r.mode,
+      payload_bps: r.source_bitrate_bps,
+      wire_bps: r.effective_link_bitrate_bps,
+      latency_ms: r.total_ms,
+    }));
   return (
     <><PageTitle
         tag="RESEARCH / MEASURED OUTCOMES"
@@ -164,6 +180,36 @@ export default function Analytics() {
             )}
           </div>
         )}
-      </Panel></>
+      </Panel><div className="two-col"><Panel title="Measured bitrate" eyebrow="PAYLOAD + WIRE OVERHEAD">
+          {chart.length ? (
+            <div className="chart">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={chart}>
+                  <CartesianGrid stroke="#253044" />
+                  <XAxis dataKey="mode" stroke="#8793a8" />
+                  <YAxis stroke="#8793a8" />
+                  <Tooltip contentStyle={{ background: "#111b2a" }} />
+                  <Legend />
+                  <Bar
+                    dataKey="payload_bps"
+                    name="Payload / speech second"
+                    fill="#59dfd6"
+                    radius={[4, 4, 0, 0]}
+                  />
+                  <Bar
+                    dataKey="wire_bps"
+                    name="Wire / speech second"
+                    fill="#9c87ff"
+                    radius={[4, 4, 0, 0]}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          ) : (
+            <Empty>
+              No measurements yet. Run a transmission or experiment.
+            </Empty>
+          )}
+        </Panel></div></>
   );
 }
