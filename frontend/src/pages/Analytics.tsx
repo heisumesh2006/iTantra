@@ -4,7 +4,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGri
 import { api, baseline, message } from "../api";
 import { useAudio } from "../context";
 import type { Experiment, Metrics } from "../types";
-import { PageTitle, Panel, Busy, ErrorBox, Empty } from "../components/ui";
+import { PageTitle, Panel, Busy, ErrorBox, Empty, format } from "../components/ui";
 export default function Analytics() {
   const { media } = useAudio();
   const [runs, setRuns] = useState<
@@ -233,6 +233,37 @@ export default function Analytics() {
               CPU inference and radio processing time will be measured.
             </Empty>
           )}
-        </Panel></div></>
+        </Panel></div>{job?.result && (
+        <Panel title="Experiment trials" eyebrow="INDIVIDUAL OBSERVATIONS">
+          <div className="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Mode</th>
+                  <th>Es/N0</th>
+                  <th>Recovery</th>
+                  <th>BER</th>
+                  <th>WER</th>
+                  <th>CER</th>
+                  <th>Wire bits</th>
+                </tr>
+              </thead>
+              <tbody>
+                {job.result.runs.map((r, i) => (
+                  <tr key={i}>
+                    <td>{r.mode}</td>
+                    <td>{r.config?.channel_config?.snr_db ?? r.snr_db} dB</td>
+                    <td>{r.error || r.recovery_status}</td>
+                    <td>{format(r.metrics?.raw_ber, 6)}</td>
+                    <td>{format(r.metrics?.wer)}</td>
+                    <td>{format(r.metrics?.cer)}</td>
+                    <td>{format(r.metrics?.total_transmitted_bits, 0)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Panel>
+      )}</>
   );
 }
