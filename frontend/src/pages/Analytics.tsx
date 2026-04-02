@@ -1,10 +1,25 @@
-
 import { useEffect, useState } from "react";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend } from "recharts";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  CartesianGrid,
+  Legend,
+} from "recharts";
 import { api, baseline, message } from "../api";
 import { useAudio } from "../context";
 import type { Experiment, Metrics } from "../types";
-import { PageTitle, Panel, Busy, ErrorBox, Empty, format } from "../components/ui";
+import {
+  PageTitle,
+  Panel,
+  Busy,
+  ErrorBox,
+  Empty,
+  format,
+} from "../components/ui";
 export default function Analytics() {
   const { media } = useAudio();
   const [runs, setRuns] = useState<
@@ -84,11 +99,14 @@ export default function Analytics() {
       latency_ms: r.total_ms,
     }));
   return (
-    <><PageTitle
+    <>
+      <PageTitle
         tag="RESEARCH / MEASURED OUTCOMES"
         title="Performance Analytics"
         description="Trace every comparison to a saved source, channel configuration, model and seed."
-      /><ErrorBox error={error || job?.error || null} /><Panel
+      />
+      <ErrorBox error={error || job?.error || null} />
+      <Panel
         title="Run a controlled mode comparison"
         eyebrow="SAME SOURCE / CONFIGURATION"
       >
@@ -180,7 +198,9 @@ export default function Analytics() {
             )}
           </div>
         )}
-      </Panel><div className="two-col"><Panel title="Measured bitrate" eyebrow="PAYLOAD + WIRE OVERHEAD">
+      </Panel>
+      <div className="two-col">
+        <Panel title="Measured bitrate" eyebrow="PAYLOAD + WIRE OVERHEAD">
           {chart.length ? (
             <div className="chart">
               <ResponsiveContainer width="100%" height="100%">
@@ -210,7 +230,8 @@ export default function Analytics() {
               No measurements yet. Run a transmission or experiment.
             </Empty>
           )}
-        </Panel><Panel title="Computation time" eyebrow="WALL CLOCK / NOT RF LATENCY">
+        </Panel>
+        <Panel title="Computation time" eyebrow="WALL CLOCK / NOT RF LATENCY">
           {chart.length ? (
             <div className="chart">
               <ResponsiveContainer width="100%" height="100%">
@@ -233,7 +254,9 @@ export default function Analytics() {
               CPU inference and radio processing time will be measured.
             </Empty>
           )}
-        </Panel></div>{job?.result && (
+        </Panel>
+      </div>
+      {job?.result && (
         <Panel title="Experiment trials" eyebrow="INDIVIDUAL OBSERVATIONS">
           <div className="table-wrap">
             <table>
@@ -264,6 +287,12 @@ export default function Analytics() {
             </table>
           </div>
         </Panel>
-      )}</>
+      )}
+      <p className="muted small">
+        No population-level language or perceptual quality claims. WER / CER
+        require a human reference; PESQ and STOI are not measured. Confidence
+        intervals and multilingual evaluation require more samples.
+      </p>
+    </>
   );
 }
