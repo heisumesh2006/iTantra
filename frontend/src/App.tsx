@@ -1,5 +1,7 @@
 
-import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { BrowserRouter, NavLink, Route, Routes, Link, useLocation } from "react-router-dom";
+import { AudioLines, Radio, FlaskConical, Languages, Layers3, ChartNoAxesCombined, MessagesSquare, GitBranch, History, ArrowUpRight } from "lucide-react";
 import { AudioContext } from "./context";
 import Landing from "./pages/Landing";
 import Studio from "./pages/Studio";
@@ -9,9 +11,66 @@ import Compression from "./pages/Compression";
 import Analytics from "./pages/Analytics";
 import HistoryPage from "./pages/History";
 import Research from "./pages/Research";
+const navigation = [
+  { to: "/", label: "Overview", icon: Layers3 },
+  { to: "/studio", label: "Transceiver Studio", icon: Radio },
+  { to: "/channel", label: "Channel Lab", icon: FlaskConical },
+  { to: "/speech", label: "Speech Lab", icon: Languages },
+  { to: "/compression", label: "Compression", icon: AudioLines },
+  {
+    to: "/analytics",
+    label: "Performance Analytics",
+    icon: ChartNoAxesCombined,
+  },
+  { to: "/live", label: "Live Demo", icon: MessagesSquare },
+  { to: "/research", label: "Research & Architecture", icon: GitBranch },
+  { to: "/history", label: "Experiment History", icon: History },
+];
 function Shell() {
+  const [open, setOpen] = useState(false);
+  const location = useLocation();
+  useEffect(() => {
+    setOpen(false);
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
   return (
-    <div className="app-shell"><div className="main-shell"><main id="main"><Routes>
+    <div className="app-shell"><aside className={"sidebar " + (open ? "open" : "")}>
+        <Link to="/" className="brand">
+          <span className="brand-mark">
+            <AudioLines size={25} />
+          </span>
+          <div>
+            iTantra<small>NEURAL COMMUNICATION LAB</small>
+          </div>
+        </Link>
+        <span className="nav-label">WORKSPACE</span>
+        <nav>
+          {navigation.map((n) => (
+            <NavLink key={n.to} to={n.to} end={n.to === "/"}>
+              <n.icon size={18} />
+              {n.label}
+              {n.to === "/studio" && <span className="nav-dot" />}
+            </NavLink>
+          ))}
+        </nav>
+        <div className="sidebar-bottom">
+          <div className="local-badge">
+            <i />
+            LOCAL RESEARCH ENVIRONMENT
+          </div>
+          <p>
+            Speech stays on this machine.
+            <br />
+            No cloud inference. No physical RF.
+          </p>
+          <a href="http://127.0.0.1:8000/docs" target="_blank" rel="noreferrer">
+            API documentation <ArrowUpRight size={14} />
+          </a>
+          <div className="sidebar-version">
+            iTantra v1.0 <span>CPU READY</span>
+          </div>
+        </div>
+      </aside><div className="main-shell"><main id="main"><Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/studio" element={<Studio />} />
             <Route path="/channel" element={<ChannelLab />} />
