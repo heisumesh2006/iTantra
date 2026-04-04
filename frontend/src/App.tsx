@@ -1,7 +1,8 @@
 
 import { useEffect, useState } from "react";
 import { BrowserRouter, NavLink, Route, Routes, Link, useLocation } from "react-router-dom";
-import { AudioLines, Radio, FlaskConical, Languages, Layers3, ChartNoAxesCombined, MessagesSquare, GitBranch, History, ArrowUpRight } from "lucide-react";
+import { AudioLines, Radio, FlaskConical, Languages, Layers3, ChartNoAxesCombined, MessagesSquare, GitBranch, History, Menu, X, ArrowUpRight } from "lucide-react";
+import { api } from "./api";
 import { AudioContext } from "./context";
 import Landing from "./pages/Landing";
 import Studio from "./pages/Studio";
@@ -27,12 +28,31 @@ const navigation = [
   { to: "/history", label: "Experiment History", icon: History },
 ];
 function Shell() {
+  const [online, setOnline] = useState<boolean | null>(null);
   const [open, setOpen] = useState(false);
   const location = useLocation();
   useEffect(() => {
     setOpen(false);
     window.scrollTo(0, 0);
   }, [location.pathname]);
+  useEffect(() => {
+    let alive = true;
+    const check = () => {
+      void api("/health")
+        .then(() => {
+          if (alive) setOnline(true);
+        })
+        .catch(() => {
+          if (alive) setOnline(false);
+        });
+    };
+    check();
+    const timer = setInterval(check, 15000);
+    return () => {
+      alive = false;
+      clearInterval(timer);
+    };
+  }, []);
   return (
     <div className="app-shell"><aside className={"sidebar " + (open ? "open" : "")}>
         <Link to="/" className="brand">
@@ -70,7 +90,38 @@ function Shell() {
             iTantra v1.0 <span>CPU READY</span>
           </div>
         </div>
-      </aside><div className="main-shell"><main id="main"><Routes>
+      </aside><div className="main-shell"><div className="topbar">
+          <button
+            className="menu-toggle"
+            aria-label="Toggle navigation"
+            onClick={() => setOpen((v) => !v)}
+          >
+            {open ? <X /> : <Menu />}
+          </button>
+          <div className="breadcrumb">
+            LABORATORY <span>/</span>{" "}
+            {navigation
+              .find((n) => n.to === location.pathname)
+              ?.label.toUpperCase() || "OVERVIEW"}
+          </div>
+          <div className="topbar-status">
+            <span className="simulation-label">SOFTWARE SIMULATION</span>
+            <span
+              className={
+                "connection " +
+                (online === null ? "pending" : online ? "online" : "")
+              }
+            >
+              <i />
+              {online === null
+                ? "Connecting backend"
+                : online
+                  ? "Backend connected"
+                  : "Backend offline"}
+            </span>
+            <span className="avatar">IT</span>
+          </div>
+        </div><main id="main"><Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/studio" element={<Studio />} />
             <Route path="/channel" element={<ChannelLab />} />
