@@ -146,7 +146,12 @@ function Shell() {
                 </div>
               }
             />
-          </Routes></main></div></div>
+          </Routes><footer>
+            <span>
+              iTantra / Indian Multilingual Neural Voice Communication
+            </span>
+            <span>MEASURED. REPRODUCIBLE. LOCAL.</span>
+          </footer></main></div></div>
   );
 }
 export default function App() {
