@@ -90,7 +90,13 @@ function Shell() {
             iTantra v1.0 <span>CPU READY</span>
           </div>
         </div>
-      </aside><div className="main-shell"><div className="topbar">
+      </aside>{open && (
+        <button
+          className="sidebar-overlay"
+          aria-label="Close navigation"
+          onClick={() => setOpen(false)}
+        />
+      )}<div className="main-shell"><div className="topbar">
           <button
             className="menu-toggle"
             aria-label="Toggle navigation"
