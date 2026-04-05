@@ -1,7 +1,26 @@
-
 import { useEffect, useState } from "react";
-import { BrowserRouter, NavLink, Route, Routes, Link, useLocation } from "react-router-dom";
-import { AudioLines, Radio, FlaskConical, Languages, Layers3, ChartNoAxesCombined, MessagesSquare, GitBranch, History, Menu, X, ArrowUpRight } from "lucide-react";
+import {
+  BrowserRouter,
+  NavLink,
+  Route,
+  Routes,
+  Link,
+  useLocation,
+} from "react-router-dom";
+import {
+  AudioLines,
+  Radio,
+  FlaskConical,
+  Languages,
+  Layers3,
+  ChartNoAxesCombined,
+  MessagesSquare,
+  GitBranch,
+  History,
+  Menu,
+  X,
+  ArrowUpRight,
+} from "lucide-react";
 import { api } from "./api";
 import { AudioContext } from "./context";
 import Landing from "./pages/Landing";
@@ -54,7 +73,11 @@ function Shell() {
     };
   }, []);
   return (
-    <div className="app-shell"><aside className={"sidebar " + (open ? "open" : "")}>
+    <div className="app-shell">
+      <a href="#main" className="skip-link">
+        Skip to content
+      </a>
+      <aside className={"sidebar " + (open ? "open" : "")}>
         <Link to="/" className="brand">
           <span className="brand-mark">
             <AudioLines size={25} />
@@ -90,13 +113,16 @@ function Shell() {
             iTantra v1.0 <span>CPU READY</span>
           </div>
         </div>
-      </aside>{open && (
+      </aside>
+      {open && (
         <button
           className="sidebar-overlay"
           aria-label="Close navigation"
           onClick={() => setOpen(false)}
         />
-      )}<div className="main-shell"><div className="topbar">
+      )}
+      <div className="main-shell">
+        <div className="topbar">
           <button
             className="menu-toggle"
             aria-label="Toggle navigation"
@@ -127,7 +153,9 @@ function Shell() {
             </span>
             <span className="avatar">IT</span>
           </div>
-        </div><main id="main"><Routes>
+        </div>
+        <main id="main">
+          <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/studio" element={<Studio />} />
             <Route path="/channel" element={<ChannelLab />} />
@@ -146,12 +174,16 @@ function Shell() {
                 </div>
               }
             />
-          </Routes><footer>
+          </Routes>
+          <footer>
             <span>
               iTantra / Indian Multilingual Neural Voice Communication
             </span>
             <span>MEASURED. REPRODUCIBLE. LOCAL.</span>
-          </footer></main></div></div>
+          </footer>
+        </main>
+      </div>
+    </div>
   );
 }
 export default function App() {
