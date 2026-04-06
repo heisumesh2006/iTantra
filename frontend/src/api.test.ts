@@ -13,4 +13,8 @@ describe("API boundary", () => {
     );
     await expect(api("/transmissions")).rejects.toThrow("CRC failed");
   });
+  it("identifies offline backends", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("network")));
+    await expect(api("/health")).rejects.toThrow("Backend is offline");
+  });
 });
