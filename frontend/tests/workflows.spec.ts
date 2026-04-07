@@ -48,3 +48,16 @@ test("navigation, upload, ideal Opus recovery and actual audio playback", async 
   ).toBeVisible();
   await expect(page.locator("table tbody tr").first()).toBeVisible();
 });
+test("severe channel gives explicit failed recovery", async ({ page }) => {
+  await page.goto("/studio");
+  await page.getByLabel("Upload audio file").setInputFiles(audio);
+  await expect(page.getByText("Source recording", { exact: true })).toBeVisible(
+    { timeout: 30000 },
+  );
+  await page.getByLabel("Packet erasure (%)").fill("100");
+  await page.getByRole("button", { name: "Start Transmission" }).click();
+  await expect(
+    page.getByText("Payload recovery failed", { exact: true }),
+  ).toBeVisible({ timeout: 120000 });
+  await expect(page.locator("audio")).toHaveCount(1);
+});
