@@ -1,6 +1,5 @@
-
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { api } from "./api";
+import { api, baseline } from "./api";
 afterEach(() => vi.unstubAllGlobals());
 describe("API boundary", () => {
   it("reports structured processing failures", async () => {
@@ -29,5 +28,10 @@ describe("API boundary", () => {
       status: "ok",
       simulation_mode: true,
     });
+  });
+  it("defines a reproducible baseline", () => {
+    expect(baseline.seed).toBe(42);
+    expect(baseline.repetition).toBe(1);
+    expect(baseline.snr_db).toBe(12);
   });
 });
