@@ -17,4 +17,17 @@ describe("API boundary", () => {
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("network")));
     await expect(api("/health")).rejects.toThrow("Backend is offline");
   });
+  it("preserves real responses", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ status: "ok", simulation_mode: true }),
+      }),
+    );
+    await expect(api("/health")).resolves.toEqual({
+      status: "ok",
+      simulation_mode: true,
+    });
+  });
 });
