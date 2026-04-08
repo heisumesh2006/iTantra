@@ -61,3 +61,35 @@ test("severe channel gives explicit failed recovery", async ({ page }) => {
   ).toBeVisible({ timeout: 120000 });
   await expect(page.locator("audio")).toHaveCount(1);
 });
+test("real channel charts and every page render at mobile width", async ({
+  page,
+}) => {
+  await page.goto("/channel");
+  await page.getByLabel("Trials at each Es/N0").fill("2");
+  await page.getByRole("button", { name: "Run SNR sweep" }).click();
+  await expect(page.locator(".recharts-surface").first()).toBeVisible();
+  await page.screenshot({
+    path: "../docs/screenshots/channel-lab.png",
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  for (const route of [
+    "/",
+    "/studio",
+    "/channel",
+    "/speech",
+    "/compression",
+    "/analytics",
+    "/live",
+    "/research",
+    "/history",
+  ]) {
+    await page.goto(route);
+    await expect(page.locator("h1")).toBeVisible();
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= window.innerWidth,
+      ),
+    ).toBe(true);
+  }
+});
