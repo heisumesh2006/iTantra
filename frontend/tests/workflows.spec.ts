@@ -121,3 +121,23 @@ for (const [mode, label] of [
       ).toBeVisible();
   });
 }
+
+test("invalid audio and missing language models have visible errors", async ({
+  page,
+}) => {
+  await page.goto("/studio");
+  await page.getByLabel("Upload audio file").setInputFiles({
+    name: "invalid.wav",
+    mimeType: "audio/wav",
+    buffer: Buffer.from("not audio"),
+  });
+  await expect(page.getByRole("alert")).toContainText("could not decode");
+  await page.goto("/speech");
+  await page.getByRole("button", { name: "Tamil", exact: false }).click();
+  await page
+    .getByRole("button", { name: "Text to speech", exact: true })
+    .click();
+  await page.getByRole("textbox").fill("வணக்கம்");
+  await page.getByRole("button", { name: "Run synthesis" }).click();
+  await expect(page.getByRole("alert")).toContainText("TTS weights missing");
+});
