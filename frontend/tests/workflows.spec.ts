@@ -93,3 +93,31 @@ test("real channel charts and every page render at mobile width", async ({
     ).toBe(true);
   }
 });
+
+for (const [mode, label] of [
+  ["neural", "B · Neural / EnCodec"],
+  ["semantic", "C · Semantic / STT → TTS"],
+]) {
+  test(`actual ${mode} browser transmission`, async ({ page }) => {
+    await page.goto("/studio");
+    await page.getByLabel("Upload audio file").setInputFiles(audio);
+    await expect(
+      page.getByText("Source recording", { exact: true }),
+    ).toBeVisible({ timeout: 30000 });
+    await page.getByLabel("Communication mode").selectOption(mode);
+    await page.getByLabel("Channel model").selectOption("ideal");
+    await page.getByRole("button", { name: "Start Transmission" }).click();
+    await expect(
+      page.getByText("Payload recovered with valid CRCs"),
+    ).toBeVisible({ timeout: 120000 });
+    await expect(page.locator("audio")).toHaveCount(2);
+    if (mode === "semantic")
+      await expect(
+        page
+          .getByText("The radio link carries our voice across the network.", {
+            exact: true,
+          })
+          .last(),
+      ).toBeVisible();
+  });
+}
