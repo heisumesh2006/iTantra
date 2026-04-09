@@ -181,3 +181,31 @@ test("recovered semantic text survives missing TTS model", async ({ page }) => {
   await expect(page.getByText("வணக்கம்", { exact: true }).last()).toBeVisible();
   await expect(page.locator("audio")).toHaveCount(0);
 });
+
+test("Kannada speech uses native CTC text through actual radio and TTS", async ({
+  page,
+}) => {
+  await page.goto("/studio");
+  await page
+    .getByLabel("Upload audio file")
+    .setInputFiles(path.resolve("../research/results/smoke/kn-synthetic.wav"));
+  await expect(page.getByText("Source recording", { exact: true })).toBeVisible(
+    { timeout: 30000 },
+  );
+  await page.getByLabel("Input language").selectOption("kn");
+  await page.getByLabel("Communication mode").selectOption("semantic");
+  await page.getByLabel("Channel model").selectOption("ideal");
+  await page.getByRole("button", { name: "Start Transmission" }).click();
+  await expect(page.getByText("Payload recovered with valid CRCs")).toBeVisible(
+    { timeout: 120000 },
+  );
+  await expect(
+    page.getByText("ನಮಸ್ಕಾರ ಇದು ನಮ್ಮ ಧ್ವನಿಯ ಪರೀಕ್ಷೆ", { exact: true }).last(),
+  ).toBeVisible();
+  await expect(page.locator("audio")).toHaveCount(2);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({
+    path: "../docs/screenshots/kannada-semantic.png",
+    fullPage: true,
+  });
+});
