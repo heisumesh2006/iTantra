@@ -141,3 +141,25 @@ test("invalid audio and missing language models have visible errors", async ({
   await page.getByRole("button", { name: "Run synthesis" }).click();
   await expect(page.getByRole("alert")).toContainText("TTS weights missing");
 });
+
+test("microphone record pause resume and upload with synthetic capture", async ({
+  browser,
+}) => {
+  const context = await browser.newContext({ permissions: ["microphone"] });
+  const page = await context.newPage();
+  await page.goto("http://127.0.0.1:5173/studio");
+  await page.getByRole("button", { name: "Record voice", exact: true }).click();
+  await expect(page.getByText(/Recording ·/)).toBeVisible();
+  await page.getByRole("button", { name: "Pause", exact: true }).click();
+  await expect(page.getByText(/Paused ·/)).toBeVisible();
+  await page.getByRole("button", { name: "Resume", exact: true }).click();
+  await expect(page.getByText(/Recording ·/)).toBeVisible();
+  await expect
+    .poll(async () => await page.getByText(/Recording ·/).textContent())
+    .not.toContain("· 0s");
+  await page.getByRole("button", { name: "Stop", exact: true }).click();
+  await expect(page.getByText("Source recording", { exact: true })).toBeVisible(
+    { timeout: 30000 },
+  );
+  await context.close();
+});
