@@ -163,3 +163,21 @@ test("microphone record pause resume and upload with synthetic capture", async (
   );
   await context.close();
 });
+
+test("recovered semantic text survives missing TTS model", async ({ page }) => {
+  await page.goto("/studio");
+  await page.getByLabel("Input language").selectOption("ta");
+  await page.getByLabel("Communication mode").selectOption("semantic");
+  await page.getByLabel("Use explicit text input (bypasses STT)").check();
+  await page.getByLabel("Manual semantic text").fill("வணக்கம்");
+  await page.getByLabel("Channel model").selectOption("ideal");
+  await page.getByRole("button", { name: "Start Transmission" }).click();
+  await expect(page.getByText("Payload recovered with valid CRCs")).toBeVisible(
+    { timeout: 30000 },
+  );
+  await expect(page.getByRole("alert")).toContainText(
+    "Audio reconstruction failed",
+  );
+  await expect(page.getByText("வணக்கம்", { exact: true }).last()).toBeVisible();
+  await expect(page.locator("audio")).toHaveCount(0);
+});
