@@ -1,4 +1,3 @@
-
 import { test, expect } from "@playwright/test";
 import path from "node:path";
 const audio = path.resolve("../research/results/smoke/en-synthetic.wav");
@@ -208,4 +207,44 @@ test("Kannada speech uses native CTC text through actual radio and TTS", async (
     path: "../docs/screenshots/kannada-semantic.png",
     fullPage: true,
   });
+});
+
+test("compression, analytics exports and voice-turn demo use backend results", async ({
+  page,
+  request,
+}) => {
+  test.setTimeout(300000);
+  await page.goto("/studio");
+  await page.getByLabel("Upload audio file").setInputFiles(audio);
+  await expect(page.getByText("Source recording", { exact: true })).toBeVisible(
+    { timeout: 30000 },
+  );
+  await page.getByRole("link", { name: "Compression", exact: true }).click();
+  await page.getByRole("button", { name: "Compare both codecs" }).click();
+  await expect(page.getByText("Payload recovered with valid CRCs")).toHaveCount(
+    2,
+    { timeout: 180000 },
+  );
+  await page
+    .getByRole("link", { name: "Performance Analytics", exact: true })
+    .click();
+  await page.getByLabel("Es/N0 points (comma separated)").fill("20");
+  await page.getByRole("button", { name: "Run A / B / C" }).click();
+  await expect(page.locator("table tbody tr")).toHaveCount(3, {
+    timeout: 180000,
+  });
+  const exported = await page
+    .getByRole("link", { name: "CSV", exact: true })
+    .getAttribute("href");
+  expect(exported).toBeTruthy();
+  const response = await request.get(exported!);
+  expect(response.ok()).toBeTruthy();
+  expect(await response.text()).toContain("total_transmitted_bits");
+  await page.getByRole("link", { name: "Live Demo", exact: true }).click();
+  await page.getByLabel("Channel model").selectOption("ideal");
+  await page.getByRole("button", { name: "Send voice turn" }).click();
+  await expect(page.getByText("Payload recovered with valid CRCs")).toBeVisible(
+    { timeout: 120000 },
+  );
+  await expect(page.locator(".conversation")).toHaveCount(1);
 });
