@@ -1,0 +1,3 @@
+# Installation Linux
+
+From repository root: `python3 -m venv .venv`; `.venv/bin/pip install -r backend/requirements/ml.txt -r backend/requirements/dev.txt`; `npm ci --prefix frontend`; `.venv/bin/python scripts/download-models.py --stt --tts en hi kn --neural`. Backend: `cd backend && ../.venv/bin/python -m uvicorn app.main:app --host 127.0.0.1 --port 8000`. Frontend in another shell: `cd frontend && npm run dev`. Linux setup commands are documented but not executed on the Windows build machine. Docker compose provides the lightweight API only, requires optional ML installation for those modes, and is not mandatory.
