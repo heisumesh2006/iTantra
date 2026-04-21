@@ -1,0 +1,3 @@
+# Future Scope
+
+Prioritize: validated human Indian-language datasets and larger recognizer quality evaluation; robust streaming or independently decodable audio frames plus erasure concealment/ARQ; coded digital quantized latent research with actual bitstream; model-version/revision pinning and broader reference metrics; physically plausible block fading/coherence and channel-estimation error; SDR adapter validated only with equipment; authentication and job isolation before LAN deployment. A learned adaptive policy requires collected training/evaluation data. Current latency/budget rules are recommendations, not guarantees.
