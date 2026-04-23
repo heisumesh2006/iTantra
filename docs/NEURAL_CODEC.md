@@ -1,0 +1,3 @@
+# Neural Codec
+
+Transformers EncodecModel uses facebook/encodec_24khz, 24 kHz mono, unnormalized mode, target bandwidths 1.5/3/6/12 kbps. EC10 envelope: magic 4 bytes, big-endian JSON length uint32, compact JSON with model ID, tensor shape, sample count, rate, bandwidth and 10-bit token width; then MSB-first packed indices, with zero padding of the final byte. Decode checks shape, length and sample bounds before allocating tensor data. Per-message metadata counts toward size. The installed 24 kHz model uses no per-frame scaling; other normalized models are rejected. No token concealment or corrupted-token recovery is claimed. All packets must pass CRC before decode.
